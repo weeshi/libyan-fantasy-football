@@ -21,17 +21,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-slate-900" dir="rtl">
       {/* Header */}
       <div className="border-b border-slate-700 bg-slate-800 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-              <p className="text-slate-400">Welcome back, {user?.name}!</p>
+              <h1 className="text-3xl font-bold text-white">لوحة التحكم</h1>
+              <p className="text-slate-400">أهلاً بعودتك، {user?.name}!</p>
             </div>
             <Link href="/">
-              <Button variant="outline">Home</Button>
+              <Button variant="outline">الرئيسية</Button>
             </Link>
           </div>
         </div>
@@ -42,41 +42,41 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400">Total Teams</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">إجمالي الفرق</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">0</div>
-              <p className="text-xs text-slate-500 mt-1">Create your first team</p>
+              <p className="text-xs text-slate-500 mt-1">أنشئ فريقك الأول</p>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400">Active Leagues</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">الدوريات النشطة</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">0</div>
-              <p className="text-xs text-slate-500 mt-1">Join or create a league</p>
+              <p className="text-xs text-slate-500 mt-1">انضم أو أنشئ دوري</p>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400">Total Points</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">إجمالي النقاط</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">0</div>
-              <p className="text-xs text-slate-500 mt-1">Points this season</p>
+              <p className="text-xs text-slate-500 mt-1">النقاط هذا الموسم</p>
             </CardContent>
           </Card>
 
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400">Best Rank</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">أفضل ترتيب</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">-</div>
-              <p className="text-xs text-slate-500 mt-1">Your highest position</p>
+              <p className="text-xs text-slate-500 mt-1">أعلى مركز لك</p>
             </CardContent>
           </Card>
         </div>
@@ -84,19 +84,19 @@ export default function Dashboard() {
         {/* Main Content */}
         <Tabs defaultValue="teams" className="space-y-4">
           <TabsList className="bg-slate-800 border-slate-700">
-            <TabsTrigger value="teams" className="text-slate-300">My Teams</TabsTrigger>
-            <TabsTrigger value="leagues" className="text-slate-300">Leagues</TabsTrigger>
-            <TabsTrigger value="players" className="text-slate-300">Players</TabsTrigger>
+            <TabsTrigger value="teams" className="text-slate-300">فريقي</TabsTrigger>
+            <TabsTrigger value="leagues" className="text-slate-300">الدوريات</TabsTrigger>
+            <TabsTrigger value="players" className="text-slate-300">اللاعبون</TabsTrigger>
           </TabsList>
 
           {/* My Teams Tab */}
           <TabsContent value="teams" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">My Teams</h2>
+              <h2 className="text-2xl font-bold text-white">فريقي</h2>
               <Link href="/create-team">
                 <Button className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Team
+                  <Plus className="w-4 h-4 ml-2" />
+                  إنشاء فريق
                 </Button>
               </Link>
             </div>
@@ -104,15 +104,15 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <Card className="bg-slate-800 border-slate-700 hover:border-slate-600 transition cursor-pointer">
                 <CardHeader>
-                  <CardTitle className="text-white">No Teams Yet</CardTitle>
+                  <CardTitle className="text-white">لا توجد فرق بعد</CardTitle>
                   <CardDescription className="text-slate-400">
-                    Create your first fantasy football team to get started
+                    أنشئ فريقك الأول في لعبة كرة القدم الخيالية للبدء
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/create-team">
                     <Button variant="outline" className="w-full">
-                      Create Team
+                      إنشاء فريق
                     </Button>
                   </Link>
                 </CardContent>
@@ -123,11 +123,11 @@ export default function Dashboard() {
           {/* Leagues Tab */}
           <TabsContent value="leagues" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">Leagues</h2>
+              <h2 className="text-2xl font-bold text-white">الدوريات</h2>
               <Link href="/create-league">
                 <Button className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create League
+                  <Plus className="w-4 h-4 ml-2" />
+                  إنشاء دوري
                 </Button>
               </Link>
             </div>
@@ -137,16 +137,16 @@ export default function Dashboard() {
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Trophy className="w-5 h-5 text-yellow-400" />
-                    No Leagues Yet
+                    لا توجد دوريات بعد
                   </CardTitle>
                   <CardDescription className="text-slate-400">
-                    Join an existing league or create a new one
+                    انضم إلى دوري موجود أو أنشئ واحداً جديداً
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Link href="/create-league">
                     <Button variant="outline" className="w-full">
-                      Create League
+                      إنشاء دوري
                     </Button>
                   </Link>
                 </CardContent>
@@ -156,45 +156,45 @@ export default function Dashboard() {
 
           {/* Players Tab */}
           <TabsContent value="players" className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">Browse Players</h2>
+            <h2 className="text-2xl font-bold text-white">تصفح اللاعبين</h2>
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  Libyan Football League Players
+                  لاعبو الدوري الليبي
                 </CardTitle>
                 <CardDescription className="text-slate-400">
-                  Search and filter players by team and position
+                  ابحث وصفي اللاعبين حسب الفريق والمركز
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 flex-col md:flex-row">
                     <input
                       type="text"
-                      placeholder="Search players..."
+                      placeholder="ابحث عن لاعب..."
                       className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded text-white placeholder-slate-400"
                     />
                     <select className="px-3 py-2 bg-slate-700 border border-slate-600 rounded text-white">
-                      <option>All Teams</option>
-                      <option>Al-Ahly Benghazi</option>
-                      <option>Al-Ahly Tripoli</option>
-                      <option>Al-Hilal</option>
-                      <option>Al-Zawiya</option>
-                      <option>Ittihad Benghazi</option>
+                      <option>جميع الفرق</option>
+                      <option>الأهلي بنغازي</option>
+                      <option>الأهلي طرابلس</option>
+                      <option>الهلال</option>
+                      <option>الزاوية</option>
+                      <option>اتحاد بنغازي</option>
                     </select>
                     <select className="px-3 py-2 bg-slate-700 border border-slate-600 rounded text-white">
-                      <option>All Positions</option>
-                      <option>Goalkeeper</option>
-                      <option>Defender</option>
-                      <option>Midfielder</option>
-                      <option>Forward</option>
+                      <option>جميع المراكز</option>
+                      <option>حارس مرمى</option>
+                      <option>مدافع</option>
+                      <option>لاعب وسط</option>
+                      <option>مهاجم</option>
                     </select>
                   </div>
 
                   <div className="text-center py-8">
                     <TrendingUp className="w-12 h-12 text-slate-600 mx-auto mb-2" />
-                    <p className="text-slate-400">Players will appear here once you create a team</p>
+                    <p className="text-slate-400">سيظهر اللاعبون هنا بعد إنشاء فريق</p>
                   </div>
                 </div>
               </CardContent>

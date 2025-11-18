@@ -44,3 +44,12 @@
 - [ ] Final testing and bug fixes
 - [ ] Checkpoint before publishing
 - [ ] Deploy to production
+
+
+## Localization & RTL
+- [x] Translate all content to Arabic
+- [x] Implement RTL layout support
+- [x] Add Arabic font (Tajawal or Cairo)
+- [x] Rename app to "طَلْبه"
+- [x] Update all UI text to Arabic
+- [x] Test RTL on all pages

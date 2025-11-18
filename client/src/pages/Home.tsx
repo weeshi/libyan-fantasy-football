@@ -9,26 +9,26 @@ export default function Home() {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" dir="rtl">
       {/* Navigation */}
       <nav className="border-b border-slate-700 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <img src={APP_LOGO} alt="Logo" className="w-8 h-8" />
             <span className="text-xl font-bold text-white">{APP_TITLE}</span>
+            <img src={APP_LOGO} alt="شعار" className="w-8 h-8" />
           </div>
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>
                 <span className="text-slate-300">{user?.name}</span>
                 <Link href="/dashboard">
-                  <Button variant="default" size="sm">Dashboard</Button>
+                  <Button variant="default" size="sm">لوحة التحكم</Button>
                 </Link>
-                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+                <Button variant="outline" size="sm" onClick={logout}>تسجيل الخروج</Button>
               </>
             ) : (
               <a href={getLoginUrl()}>
-                <Button variant="default" size="sm">Login</Button>
+                <Button variant="default" size="sm">تسجيل الدخول</Button>
               </a>
             )}
           </div>
@@ -39,21 +39,22 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-            Libyan Fantasy Football
+            طَلْبه
           </h1>
+          <p className="text-2xl text-blue-400 mb-4 font-semibold">لعبة كرة القدم الخيالية الليبية</p>
           <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Build your dream team from the best players in the Libyan Football League. Compete with friends, manage your budget, and climb the leaderboard.
+            اختر أفضل اللاعبين من الدوري الليبي لكرة القدم. تنافس مع أصدقائك، أدر ميزانيتك، واصعد إلى قمة الترتيب.
           </p>
           {!isAuthenticated ? (
             <a href={getLoginUrl()}>
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Start Playing Now
+                ابدأ اللعب الآن
               </Button>
             </a>
           ) : (
             <Link href="/dashboard">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Go to Dashboard
+                انتقل إلى لوحة التحكم
               </Button>
             </Link>
           )}
@@ -63,45 +64,45 @@ export default function Home() {
       {/* Features Section */}
       <section className="bg-slate-800/50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">How It Works</h2>
+          <h2 className="text-3xl font-bold text-white mb-12 text-center">كيفية اللعب</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-slate-700 border-slate-600">
               <CardHeader>
                 <Users className="w-8 h-8 text-blue-400 mb-2" />
-                <CardTitle className="text-white">Build Your Team</CardTitle>
+                <CardTitle className="text-white">اختر فريقك</CardTitle>
               </CardHeader>
               <CardContent className="text-slate-300">
-                Select 11 players from the Libyan Football League within your budget. Mix and match different positions strategically.
+                اختر 11 لاعباً من الدوري الليبي ضمن ميزانيتك. امزج بين المراكز المختلفة بذكاء.
               </CardContent>
             </Card>
 
             <Card className="bg-slate-700 border-slate-600">
               <CardHeader>
                 <Trophy className="w-8 h-8 text-yellow-400 mb-2" />
-                <CardTitle className="text-white">Compete</CardTitle>
+                <CardTitle className="text-white">تنافس</CardTitle>
               </CardHeader>
               <CardContent className="text-slate-300">
-                Join leagues with friends or create your own. Compete weekly as players score points based on their real-world performance.
+                انضم إلى دوري مع أصدقائك أو أنشئ واحداً جديداً. تنافس أسبوعياً بناءً على أداء اللاعبين الحقيقي.
               </CardContent>
             </Card>
 
             <Card className="bg-slate-700 border-slate-600">
               <CardHeader>
                 <Zap className="w-8 h-8 text-orange-400 mb-2" />
-                <CardTitle className="text-white">Score Points</CardTitle>
+                <CardTitle className="text-white">احصل على نقاط</CardTitle>
               </CardHeader>
               <CardContent className="text-slate-300">
-                Earn points based on goals, assists, clean sheets, and other match statistics. Captain your best player for double points.
+                اكسب نقاطاً بناءً على الأهداف والتمريرات الحاسمة والدفاع النظيف. اجعل قائدك يحصل على نقاط مضاعفة.
               </CardContent>
             </Card>
 
             <Card className="bg-slate-700 border-slate-600">
               <CardHeader>
                 <BarChart3 className="w-8 h-8 text-green-400 mb-2" />
-                <CardTitle className="text-white">Climb Rankings</CardTitle>
+                <CardTitle className="text-white">اصعد الترتيب</CardTitle>
               </CardHeader>
               <CardContent className="text-slate-300">
-                Track your progress on the leaderboard. Make transfers each week to improve your team and outscore your opponents.
+                تابع تقدمك في الترتيب. قم بعمليات نقل أسبوعية لتحسين فريقك والتفوق على منافسيك.
               </CardContent>
             </Card>
           </div>
@@ -110,26 +111,26 @@ export default function Home() {
 
       {/* Scoring System */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold text-white mb-12 text-center">Scoring System</h2>
+        <h2 className="text-3xl font-bold text-white mb-12 text-center">نظام النقاط</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Goalkeeper & Defenders</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">حراس المرمى والمدافعون</h3>
             <ul className="space-y-2 text-slate-300">
-              <li>Clean Sheet (90 mins): <span className="text-green-400 font-semibold">+4 pts</span></li>
-              <li>Goal: <span className="text-green-400 font-semibold">+6 pts</span></li>
-              <li>Assist: <span className="text-green-400 font-semibold">+1 pt</span></li>
-              <li>Yellow Card: <span className="text-red-400 font-semibold">-1 pt</span></li>
-              <li>Red Card: <span className="text-red-400 font-semibold">-3 pts</span></li>
+              <li>الدفاع النظيف (90 دقيقة): <span className="text-green-400 font-semibold">+4 نقاط</span></li>
+              <li>الهدف: <span className="text-green-400 font-semibold">+6 نقاط</span></li>
+              <li>التمريرة الحاسمة: <span className="text-green-400 font-semibold">+1 نقطة</span></li>
+              <li>البطاقة الصفراء: <span className="text-red-400 font-semibold">-1 نقطة</span></li>
+              <li>البطاقة الحمراء: <span className="text-red-400 font-semibold">-3 نقاط</span></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Midfielders & Forwards</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">لاعبو الوسط والمهاجمون</h3>
             <ul className="space-y-2 text-slate-300">
-              <li>Goal: <span className="text-green-400 font-semibold">+5 pts</span></li>
-              <li>Assist: <span className="text-green-400 font-semibold">+1 pt</span></li>
-              <li>Clean Sheet: <span className="text-green-400 font-semibold">+1 pt</span></li>
-              <li>Yellow Card: <span className="text-red-400 font-semibold">-1 pt</span></li>
-              <li>Red Card: <span className="text-red-400 font-semibold">-3 pts</span></li>
+              <li>الهدف: <span className="text-green-400 font-semibold">+5 نقاط</span></li>
+              <li>التمريرة الحاسمة: <span className="text-green-400 font-semibold">+1 نقطة</span></li>
+              <li>الدفاع النظيف: <span className="text-green-400 font-semibold">+1 نقطة</span></li>
+              <li>البطاقة الصفراء: <span className="text-red-400 font-semibold">-1 نقطة</span></li>
+              <li>البطاقة الحمراء: <span className="text-red-400 font-semibold">-3 نقاط</span></li>
             </ul>
           </div>
         </div>
@@ -138,20 +139,20 @@ export default function Home() {
       {/* CTA Section */}
       <section className="bg-blue-600 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Play?</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">هل أنت مستعد للعب؟</h2>
           <p className="text-lg text-blue-100 mb-8">
-            Join thousands of fantasy football fans competing in the Libyan Football League.
+            انضم إلى آلاف عشاق كرة القدم الخيالية الذين يتنافسون في الدوري الليبي.
           </p>
           {!isAuthenticated ? (
             <a href={getLoginUrl()}>
               <Button size="lg" variant="secondary">
-                Create Your Account
+                إنشاء حسابك
               </Button>
             </a>
           ) : (
             <Link href="/dashboard">
               <Button size="lg" variant="secondary">
-                Start Your Journey
+                ابدأ رحلتك
               </Button>
             </Link>
           )}
@@ -161,12 +162,12 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-700 bg-slate-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <p className="text-slate-400">© 2024 Libyan Fantasy Football. All rights reserved.</p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-slate-400">© 2024 طَلْبه - لعبة كرة القدم الخيالية الليبية. جميع الحقوق محفوظة.</p>
             <div className="flex gap-6 text-slate-400">
-              <a href="#" className="hover:text-white transition">About</a>
-              <a href="#" className="hover:text-white transition">Rules</a>
-              <a href="#" className="hover:text-white transition">Contact</a>
+              <a href="#" className="hover:text-white transition">عن اللعبة</a>
+              <a href="#" className="hover:text-white transition">القواعد</a>
+              <a href="#" className="hover:text-white transition">التواصل</a>
             </div>
           </div>
         </div>
