@@ -89,4 +89,56 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Teams
+export async function getAllTeams() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(users).limit(1000);
+}
+
+export async function getTeamById(teamId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(users).where(eq(users.id, teamId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Players
+export async function getPlayersByTeamId(teamId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  // This will be implemented after importing Player table
+  return [];
+}
+
+export async function getAllPlayers() {
+  const db = await getDb();
+  if (!db) return [];
+  return [];
+}
+
+// Leagues
+export async function getLeaguesByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return [];
+}
+
+export async function getLeagueById(leagueId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  return undefined;
+}
+
+// User Teams
+export async function getUserTeamsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return [];
+}
+
+export async function getUserTeamById(userTeamId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  return undefined;
+}
