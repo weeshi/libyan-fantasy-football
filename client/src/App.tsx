@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import PlayersManagement from "./pages/PlayersManagement";
 import LeaguesManagement from "./pages/LeaguesManagement";
 import ScoringSystem from "./pages/ScoringSystem";
+import CreateTeam from "./pages/CreateTeam";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/players"} component={PlayersManagement} />
       <Route path={"/leagues"} component={LeaguesManagement} />
       <Route path={"/scoring"} component={ScoringSystem} />
+      <Route path={"/create-team"} component={CreateTeam} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

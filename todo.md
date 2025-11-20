@@ -73,3 +73,8 @@
 - [ ] Final testing and bug fixes
 - [ ] Checkpoint before publishing
 - [ ] Deploy to production
+
+
+## Bug Fixes
+- [x] Fix missing /create-team route (404 error)
+- [x] Create team creation page
