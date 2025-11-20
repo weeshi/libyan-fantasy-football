@@ -6,6 +6,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import PlayersManagement from "./pages/PlayersManagement";
+import LeaguesManagement from "./pages/LeaguesManagement";
+import ScoringSystem from "./pages/ScoringSystem";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -13,6 +16,9 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/players"} component={PlayersManagement} />
+      <Route path={"/leagues"} component={LeaguesManagement} />
+      <Route path={"/scoring"} component={ScoringSystem} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

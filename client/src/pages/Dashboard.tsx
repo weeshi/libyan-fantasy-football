@@ -124,10 +124,10 @@ export default function Dashboard() {
           <TabsContent value="leagues" className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">الدوريات</h2>
-              <Link href="/create-league">
+              <Link href="/leagues">
                 <Button className="bg-blue-600 hover:bg-blue-700">
                   <Plus className="w-4 h-4 ml-2" />
-                  إنشاء دوري
+                  عرض الدوريات
                 </Button>
               </Link>
             </div>
@@ -156,7 +156,14 @@ export default function Dashboard() {
 
           {/* Players Tab */}
           <TabsContent value="players" className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">تصفح اللاعبين</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">تصفح اللاعبين</h2>
+              <Link href="/players">
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  إدارة اللاعبين
+                </Button>
+              </Link>
+            </div>
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">

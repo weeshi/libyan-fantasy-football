@@ -40,12 +40,6 @@
 - [ ] Unit tests for scoring system
 - [ ] Integration tests for team creation
 
-## Deployment
-- [ ] Final testing and bug fixes
-- [ ] Checkpoint before publishing
-- [ ] Deploy to production
-
-
 ## Localization & RTL
 - [x] Translate all content to Arabic
 - [x] Implement RTL layout support
@@ -53,3 +47,29 @@
 - [x] Rename app to "طَلْبه"
 - [x] Update all UI text to Arabic
 - [x] Test RTL on all pages
+
+## New Implementation Tasks
+- [x] Step 1: Player Management System (for all users)
+  - [x] Create players management page
+  - [x] Add/edit/delete players UI
+  - [x] Display player list with search and filter
+  - [x] Add player statistics display
+  
+- [x] Step 2: League System with Admin Controls
+  - [x] Display all available leagues
+  - [x] Add search and filter for leagues
+  - [x] Join league functionality
+  - [x] Admin-only league creation
+  - [x] League details and standings
+  
+- [x] Step 3: Manual Scoring System
+  - [x] Admin panel for entering match results
+  - [x] Player performance input form
+  - [x] Automatic point calculation
+  - [x] Update leaderboard after scoring
+  - [x] View scoring history
+
+## Deployment
+- [ ] Final testing and bug fixes
+- [ ] Checkpoint before publishing
+- [ ] Deploy to production
