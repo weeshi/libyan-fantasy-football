@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
+import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -22,11 +23,11 @@ export const appRouter = router({
     list: publicProcedure.query(async () => {
       // Return list of all teams in Libyan Football League
       return [
-        { id: 1, name: "Al-Ahly Benghazi", city: "Benghazi" },
-        { id: 2, name: "Al-Ahly Tripoli", city: "Tripoli" },
-        { id: 3, name: "Al-Hilal", city: "Tripoli" },
-        { id: 4, name: "Al-Zawiya", city: "Zawiya" },
-        { id: 5, name: "Ittihad Benghazi", city: "Benghazi" },
+        { id: 1, name: "الأهلي بنغازي", city: "بنغازي" },
+        { id: 2, name: "الأهلي طرابلس", city: "طرابلس" },
+        { id: 3, name: "الهلال", city: "طرابلس" },
+        { id: 4, name: "الزاوية", city: "الزاوية" },
+        { id: 5, name: "اتحاد بنغازي", city: "بنغازي" },
       ];
     }),
   }),
@@ -63,19 +64,73 @@ export const appRouter = router({
 
   userTeams: router({
     myTeams: protectedProcedure.query(async ({ ctx }) => {
-      // Return user's teams
-      return [];
+      if (!ctx.user) return [];
+      const teams = await getUserTeamsByUserId(ctx.user.id);
+      // For each team, get the players
+      const teamsWithPlayers = await Promise.all(
+        teams.map(async (team) => {
+          const teamPlayers = await getUserTeamPlayers(team.id);
+          return { ...team, players: teamPlayers };
+        })
+      );
+      return teamsWithPlayers;
     }),
     create: protectedProcedure.input(z.object({
       teamName: z.string(),
-      leagueId: z.number(),
+      teamDescription: z.string().optional(),
+      selectedPlayerIds: z.array(z.number()),
+      leagueId: z.number().optional(),
     })).mutation(async ({ ctx, input }) => {
-      // Create a new user team in a league
-      return { id: 1, teamName: input.teamName, leagueId: input.leagueId };
+      if (!ctx.user) {
+        throw new Error("User not authenticated");
+      }
+
+      if (input.selectedPlayerIds.length < 11) {
+        throw new Error("يجب اختيار 11 لاعباً على الأقل");
+      }
+
+      try {
+        // Create the user team
+        const userTeamResult = await createUserTeam({
+          userId: ctx.user.id,
+          leagueId: input.leagueId || 1,
+          teamName: input.teamName,
+          budget: 100000000,
+          totalPoints: 0,
+        });
+
+        // Get the inserted team ID
+        const userTeamId = (userTeamResult as any).insertId || 1;
+
+        // Add selected players to the team
+        for (const playerId of input.selectedPlayerIds) {
+          const player = await getPlayerById(playerId);
+          if (player) {
+            await addPlayerToUserTeam({
+              userTeamId,
+              playerId,
+              purchasePrice: player.marketValue || 0,
+              isCaptain: 0,
+              isOnBench: 0,
+            });
+          }
+        }
+
+        return {
+          id: userTeamId,
+          teamName: input.teamName,
+          leagueId: input.leagueId || 1,
+          success: true,
+        };
+      } catch (error) {
+        console.error("Failed to create user team:", error);
+        throw new Error("فشل في إنشاء الفريق");
+      }
     }),
     getById: protectedProcedure.input(z.object({ id: z.number() })).query(async ({ ctx, input }) => {
-      // Get a specific user team
-      return null;
+      if (!ctx.user) return null;
+      const teamPlayers = await getUserTeamPlayers(input.id);
+      return { id: input.id, players: teamPlayers };
     }),
   }),
 });

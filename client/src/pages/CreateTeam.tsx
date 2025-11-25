@@ -1,18 +1,38 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useEffect, useState } from "react";
+import { trpc } from "@/lib/trpc";
+
+interface Player {
+  id: number;
+  name: string;
+  team: string;
+  position: string;
+}
 
 export default function CreateTeam() {
   const { user, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
   const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     teamName: "",
     teamDescription: "",
     selectedPlayers: [] as number[],
+  });
+
+  const createTeamMutation = trpc.userTeams.create.useMutation({
+    onSuccess: () => {
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      setError(error.message || "فشل في إنشاء الفريق");
+      setIsLoading(false);
+    },
   });
 
   useEffect(() => {
@@ -25,21 +45,19 @@ export default function CreateTeam() {
     return null;
   }
 
-  const teams = [
-    { id: 1, name: "الأهلي بنغازي" },
-    { id: 2, name: "الأهلي طرابلس" },
-    { id: 3, name: "الهلال" },
-    { id: 4, name: "الزاوية" },
-    { id: 5, name: "اتحاد بنغازي" },
-  ];
-
-  const players = [
+  const players: Player[] = [
     { id: 1, name: "أحمد علي", team: "الأهلي بنغازي", position: "حارس مرمى" },
     { id: 2, name: "محمد سالم", team: "الأهلي بنغازي", position: "مدافع" },
     { id: 3, name: "علي محمود", team: "الأهلي بنغازي", position: "لاعب وسط" },
     { id: 4, name: "خالد حسن", team: "الأهلي بنغازي", position: "مهاجم" },
     { id: 5, name: "سارة عمر", team: "الهلال", position: "مدافع" },
     { id: 6, name: "فاطمة أحمد", team: "الهلال", position: "لاعب وسط" },
+    { id: 7, name: "ياسر محمد", team: "الأهلي طرابلس", position: "حارس مرمى" },
+    { id: 8, name: "إبراهيم علي", team: "الأهلي طرابلس", position: "مدافع" },
+    { id: 9, name: "عمر حسين", team: "الزاوية", position: "لاعب وسط" },
+    { id: 10, name: "محمود أحمد", team: "الزاوية", position: "مهاجم" },
+    { id: 11, name: "علاء الدين", team: "اتحاد بنغازي", position: "مدافع" },
+    { id: 12, name: "سليم عبدالله", team: "اتحاد بنغازي", position: "لاعب وسط" },
   ];
 
   const handleSelectPlayer = (playerId: number) => {
@@ -58,10 +76,20 @@ export default function CreateTeam() {
     }
   };
 
-  const handleCreateTeam = () => {
+  const handleCreateTeam = async () => {
     if (formData.teamName && formData.selectedPlayers.length >= 11) {
-      // Here you would typically send this data to the backend
-      navigate("/dashboard");
+      setIsLoading(true);
+      setError("");
+      try {
+        await createTeamMutation.mutateAsync({
+          teamName: formData.teamName,
+          teamDescription: formData.teamDescription,
+          selectedPlayerIds: formData.selectedPlayers,
+          leagueId: 1,
+        });
+      } catch (err) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -83,6 +111,14 @@ export default function CreateTeam() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {error && (
+          <Card className="bg-red-900/20 border-red-700 mb-8">
+            <CardContent className="py-4">
+              <p className="text-red-400">{error}</p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Step 1: Team Info */}
         {step === 1 && (
           <Card className="bg-slate-800 border-slate-700">
@@ -239,14 +275,23 @@ export default function CreateTeam() {
               <Button
                 variant="outline"
                 onClick={() => setStep(2)}
+                disabled={isLoading}
               >
                 السابق
               </Button>
               <Button
                 onClick={handleCreateTeam}
-                className="bg-green-600 hover:bg-green-700"
+                disabled={isLoading}
+                className="bg-green-600 hover:bg-green-700 disabled:opacity-50"
               >
-                إنشاء الفريق
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    جاري الإنشاء...
+                  </>
+                ) : (
+                  "إنشاء الفريق"
+                )}
               </Button>
             </div>
           </div>

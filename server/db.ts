@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, userTeams, userTeamPlayers, players, leagues, InsertUserTeam, InsertUserTeamPlayer } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -107,14 +107,23 @@ export async function getTeamById(teamId: number) {
 export async function getPlayersByTeamId(teamId: number) {
   const db = await getDb();
   if (!db) return [];
-  // This will be implemented after importing Player table
-  return [];
+  try {
+    return await db.select().from(players).where(eq(players.teamId, teamId));
+  } catch (error) {
+    console.error("[Database] Failed to get players by team:", error);
+    return [];
+  }
 }
 
 export async function getAllPlayers() {
   const db = await getDb();
   if (!db) return [];
-  return [];
+  try {
+    return await db.select().from(players).limit(1000);
+  } catch (error) {
+    console.error("[Database] Failed to get all players:", error);
+    return [];
+  }
 }
 
 // Leagues
@@ -134,11 +143,72 @@ export async function getLeagueById(leagueId: number) {
 export async function getUserTeamsByUserId(userId: number) {
   const db = await getDb();
   if (!db) return [];
-  return [];
+  try {
+    return await db.select().from(userTeams).where(eq(userTeams.userId, userId));
+  } catch (error) {
+    console.error("[Database] Failed to get user teams:", error);
+    return [];
+  }
 }
 
 export async function getUserTeamById(userTeamId: number) {
   const db = await getDb();
   if (!db) return undefined;
-  return undefined;
+  try {
+    const result = await db.select().from(userTeams).where(eq(userTeams.id, userTeamId)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get user team:", error);
+    return undefined;
+  }
+}
+
+export async function createUserTeam(data: InsertUserTeam) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    const result = await db.insert(userTeams).values(data);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to create user team:", error);
+    throw error;
+  }
+}
+
+export async function addPlayerToUserTeam(data: InsertUserTeamPlayer) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    return await db.insert(userTeamPlayers).values(data);
+  } catch (error) {
+    console.error("[Database] Failed to add player to user team:", error);
+    throw error;
+  }
+}
+
+export async function getUserTeamPlayers(userTeamId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db.select().from(userTeamPlayers).where(eq(userTeamPlayers.userTeamId, userTeamId));
+  } catch (error) {
+    console.error("[Database] Failed to get user team players:", error);
+    return [];
+  }
+}
+
+export async function getPlayerById(playerId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  try {
+    const result = await db.select().from(players).where(eq(players.id, playerId)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get player:", error);
+    return undefined;
+  }
 }

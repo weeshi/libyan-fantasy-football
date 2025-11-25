@@ -5,10 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trophy, Users, TrendingUp } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useEffect } from "react";
+import { trpc } from "@/lib/trpc";
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
+
+  // Fetch user's teams from database
+  const { data: userTeams = [], isLoading: teamsLoading } = trpc.userTeams.myTeams.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -45,8 +51,8 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium text-slate-400">إجمالي الفرق</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">0</div>
-              <p className="text-xs text-slate-500 mt-1">أنشئ فريقك الأول</p>
+              <div className="text-2xl font-bold text-white">{userTeams.length}</div>
+              <p className="text-xs text-slate-500 mt-1">الفرق المنشأة</p>
             </CardContent>
           </Card>
 
@@ -101,23 +107,62 @@ export default function Dashboard() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="bg-slate-800 border-slate-700 hover:border-slate-600 transition cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-white">لا توجد فرق بعد</CardTitle>
-                  <CardDescription className="text-slate-400">
-                    أنشئ فريقك الأول في لعبة كرة القدم الخيالية للبدء
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Link href="/create-team">
-                    <Button variant="outline" className="w-full">
-                      إنشاء فريق
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
+            {teamsLoading ? (
+              <div className="text-center py-8">
+                <p className="text-slate-400">جاري تحميل الفرق...</p>
+              </div>
+            ) : userTeams.length === 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Card className="bg-slate-800 border-slate-700 hover:border-slate-600 transition cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-white">لا توجد فرق بعد</CardTitle>
+                    <CardDescription className="text-slate-400">
+                      أنشئ فريقك الأول في لعبة كرة القدم الخيالية للبدء
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Link href="/create-team">
+                      <Button variant="outline" className="w-full">
+                        إنشاء فريق
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {userTeams.map((team) => (
+                  <Card key={team.id} className="bg-slate-800 border-slate-700 hover:border-blue-500 transition">
+                    <CardHeader>
+                      <CardTitle className="text-white">{team.teamName}</CardTitle>
+                      <CardDescription className="text-slate-400">
+                        {team.players?.length || 0} لاعب
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2 mb-4">
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">النقاط:</span>
+                          <span className="text-white font-semibold">{team.totalPoints}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">الميزانية:</span>
+                          <span className="text-white font-semibold">{(team.budget / 1000000).toFixed(1)}M</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="flex-1">
+                          عرض
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1">
+                          تعديل
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Leagues Tab */}

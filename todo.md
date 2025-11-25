@@ -78,3 +78,11 @@
 ## Bug Fixes
 - [x] Fix missing /create-team route (404 error)
 - [x] Create team creation page
+
+
+## Database Integration
+- [x] Update schema with userTeams table
+- [x] Add team creation procedures to backend
+- [x] Connect CreateTeam page to API
+- [x] Display user teams in Dashboard
+- [ ] Add team edit/delete functionality
