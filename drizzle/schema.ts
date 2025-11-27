@@ -179,3 +179,22 @@ export const gameweekScores = mysqlTable("gameweekScores", {
 
 export type GameweekScore = typeof gameweekScores.$inferSelect;
 export type InsertGameweekScore = typeof gameweekScores.$inferInsert;
+
+/**
+ * Transaction history for player transfers
+ */
+export const transactions = mysqlTable("transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userTeamId: int("userTeamId").notNull(),
+  playerId: int("playerId").notNull(),
+  transactionType: mysqlEnum("transactionType", ["buy", "sell"]).notNull(),
+  price: int("price").notNull(),
+  previousPrice: int("previousPrice"),
+  budgetBefore: int("budgetBefore").notNull(),
+  budgetAfter: int("budgetAfter").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Transaction = typeof transactions.$inferSelect;
+export type InsertTransaction = typeof transactions.$inferInsert;

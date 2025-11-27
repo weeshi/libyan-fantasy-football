@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, userTeams, userTeamPlayers, players, leagues, InsertUserTeam, InsertUserTeamPlayer } from "../drizzle/schema";
+import { InsertUser, users, userTeams, userTeamPlayers, players, leagues, transactions, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -210,5 +210,57 @@ export async function getPlayerById(playerId: number) {
   } catch (error) {
     console.error("[Database] Failed to get player:", error);
     return undefined;
+  }
+}
+
+export async function updatePlayerPrice(playerId: number, newPrice: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    await db.update(players).set({ marketValue: newPrice }).where(eq(players.id, playerId));
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update player price:", error);
+    throw error;
+  }
+}
+
+export async function createTransaction(data: InsertTransaction) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    return await db.insert(transactions).values(data);
+  } catch (error) {
+    console.error("[Database] Failed to create transaction:", error);
+    throw error;
+  }
+}
+
+export async function getTransactionsByUserTeam(userTeamId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db.select().from(transactions).where(eq(transactions.userTeamId, userTeamId));
+  } catch (error) {
+    console.error("[Database] Failed to get transactions:", error);
+    return [];
+  }
+}
+
+export async function updateUserTeamBudget(userTeamId: number, newBudget: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    await db.update(userTeams).set({ budget: newBudget }).where(eq(userTeams.id, userTeamId));
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update team budget:", error);
+    throw error;
   }
 }

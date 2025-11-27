@@ -86,3 +86,14 @@
 - [x] Connect CreateTeam page to API
 - [x] Display user teams in Dashboard
 - [ ] Add team edit/delete functionality
+
+
+## Advanced Budget & Trading System
+- [x] Create admin player price management page
+- [x] Implement player price update procedures
+- [x] Create player trading/transfer page
+- [x] Implement buy/sell player procedures
+- [x] Add transaction history tracking
+- [x] Create budget management dashboard
+- [x] Implement budget constraints validation
+- [x] Add transaction history page

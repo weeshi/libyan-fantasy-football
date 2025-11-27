@@ -3,7 +3,16 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById } from "./db";
+import { TRPCError } from "@trpc/server";
+import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers } from "./db";
+
+// Admin-only procedure
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.user?.role !== 'admin') {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
+  }
+  return next({ ctx });
+});
 
 export const appRouter = router({
   system: systemRouter,
@@ -131,6 +140,82 @@ export const appRouter = router({
       if (!ctx.user) return null;
       const teamPlayers = await getUserTeamPlayers(input.id);
       return { id: input.id, players: teamPlayers };
+    }),
+    buyPlayer: protectedProcedure.input(z.object({
+      userTeamId: z.number(),
+      playerId: z.number(),
+    })).mutation(async ({ ctx, input }) => {
+      if (!ctx.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+      try {
+        const userTeam = await getUserTeamsByUserId(ctx.user.id);
+        const team = userTeam.find(t => t.id === input.userTeamId);
+        if (!team) throw new TRPCError({ code: 'NOT_FOUND', message: 'فريق غير موجود' });
+
+        const player = await getPlayerById(input.playerId);
+        if (!player) throw new TRPCError({ code: 'NOT_FOUND', message: 'لاعب غير موجود' });
+
+        if (team.budget < player.marketValue) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'ميزانية غير كافية' });
+        }
+
+        // Add player to team
+        await addPlayerToUserTeam({
+          userTeamId: input.userTeamId,
+          playerId: input.playerId,
+          purchasePrice: player.marketValue,
+          isCaptain: 0,
+          isOnBench: 0,
+        });
+
+        // Create transaction
+        const newBudget = team.budget - player.marketValue;
+        await createTransaction({
+          userTeamId: input.userTeamId,
+          playerId: input.playerId,
+          transactionType: 'buy',
+          price: player.marketValue,
+          budgetBefore: team.budget,
+          budgetAfter: newBudget,
+        });
+
+        // Update budget
+        await updateUserTeamBudget(input.userTeamId, newBudget);
+
+        return {
+          success: true,
+          newBudget,
+          message: `تم شراء ${player.name} بنجاح`,
+        };
+      } catch (error) {
+        console.error("Failed to buy player:", error);
+        throw error;
+      }
+    }),
+    getTransactions: protectedProcedure.input(z.object({
+      userTeamId: z.number(),
+    })).query(async ({ ctx, input }) => {
+      if (!ctx.user) return [];
+      return await getTransactionsByUserTeam(input.userTeamId);
+    }),
+  }),
+
+  // Admin-only player management
+  adminPlayers: router({
+    updatePrice: adminProcedure.input(z.object({
+      playerId: z.number(),
+      newPrice: z.number(),
+    })).mutation(async ({ input }) => {
+      try {
+        await updatePlayerPrice(input.playerId, input.newPrice);
+        return { success: true, message: 'تم تحديث السعر بنجاح' };
+      } catch (error) {
+        console.error("Failed to update player price:", error);
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'فشل تحديث السعر' });
+      }
+    }),
+    list: adminProcedure.query(async () => {
+      return await getAllPlayers();
     }),
   }),
 });

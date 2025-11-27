@@ -166,6 +166,20 @@ export default function Dashboard() {
           </TabsContent>
 
           {/* Leagues Tab */}
+          {/* Admin Links */}
+          {user?.role === 'admin' && (
+            <div className="mb-8 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
+              <h3 className="text-white font-semibold mb-3">أدوات الإدارة</h3>
+              <div className="flex gap-2 flex-wrap">
+                <Link href="/admin/player-prices">
+                  <Button className="bg-purple-600 hover:bg-purple-700">
+                    إدارة أسعار اللاعبين
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
           <TabsContent value="leagues" className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">الدوريات</h2>
@@ -202,12 +216,19 @@ export default function Dashboard() {
           {/* Players Tab */}
           <TabsContent value="players" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">تصفح اللاعبين</h2>
-              <Link href="/players">
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  إدارة اللاعبين
-                </Button>
-              </Link>
+              <h2 className="text-2xl font-bold text-white">اللاعبون</h2>
+              <div className="flex gap-2">
+                <Link href="/player-trading">
+                  <Button className="bg-green-600 hover:bg-green-700">
+                    سوق اللاعبين
+                  </Button>
+                </Link>
+                <Link href="/players">
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    عرض اللاعبين
+                  </Button>
+                </Link>
+              </div>
             </div>
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
