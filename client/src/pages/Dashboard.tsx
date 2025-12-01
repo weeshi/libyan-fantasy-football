@@ -166,6 +166,15 @@ export default function Dashboard() {
           </TabsContent>
 
           {/* Leagues Tab */}
+          {/* Navigation Links */}
+          <div className="mb-8 flex gap-2 flex-wrap">
+            <Link href="/leaderboard">
+              <Button className="bg-yellow-600 hover:bg-yellow-700">
+                جدول الترتيب
+              </Button>
+            </Link>
+          </div>
+
           {/* Admin Links */}
           {user?.role === 'admin' && (
             <div className="mb-8 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">

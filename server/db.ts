@@ -264,3 +264,71 @@ export async function updateUserTeamBudget(userTeamId: number, newBudget: number
     throw error;
   }
 }
+
+
+// Leaderboard functions
+export async function getLeagueLeaderboard(leagueId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    const result = await db
+      .select()
+      .from(userTeams)
+      .where(eq(userTeams.leagueId, leagueId))
+      .orderBy(userTeams.totalPoints);
+    return result.reverse(); // Sort by points descending
+  } catch (error) {
+    console.error("[Database] Failed to get league leaderboard:", error);
+    return [];
+  }
+}
+
+export async function updateTeamStatistics(
+  userTeamId: number,
+  stats: {
+    totalPoints?: number;
+    goalsFor?: number;
+    goalsAgainst?: number;
+    assists?: number;
+    wins?: number;
+    draws?: number;
+    losses?: number;
+  }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    const updateData: any = {};
+    if (stats.totalPoints !== undefined) updateData.totalPoints = stats.totalPoints;
+    if (stats.goalsFor !== undefined) updateData.goalsFor = stats.goalsFor;
+    if (stats.goalsAgainst !== undefined) updateData.goalsAgainst = stats.goalsAgainst;
+    if (stats.assists !== undefined) updateData.assists = stats.assists;
+    if (stats.wins !== undefined) updateData.wins = stats.wins;
+    if (stats.draws !== undefined) updateData.draws = stats.draws;
+    if (stats.losses !== undefined) updateData.losses = stats.losses;
+
+    await db.update(userTeams).set(updateData).where(eq(userTeams.id, userTeamId));
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update team statistics:", error);
+    throw error;
+  }
+}
+
+export async function getUserTeamWithStats(userTeamId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    const result = await db
+      .select()
+      .from(userTeams)
+      .where(eq(userTeams.id, userTeamId))
+      .limit(1);
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("[Database] Failed to get user team with stats:", error);
+    return null;
+  }
+}

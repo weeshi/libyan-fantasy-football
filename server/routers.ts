@@ -4,7 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers } from "./db";
+import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers, getLeagueLeaderboard, updateTeamStatistics } from "./db";
 
 // Admin-only procedure
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -216,6 +216,44 @@ export const appRouter = router({
     }),
     list: adminProcedure.query(async () => {
       return await getAllPlayers();
+    }),
+  }),
+
+  leaderboard: router({
+    getLeagueRankings: publicProcedure.input(z.object({
+      leagueId: z.number(),
+    })).query(async ({ input }) => {
+      try {
+        const rankings = await getLeagueLeaderboard(input.leagueId);
+        return rankings.map((team, index) => ({
+          ...team,
+          rank: index + 1,
+          goalDifference: team.goalsFor - team.goalsAgainst,
+          matchesPlayed: team.wins + team.draws + team.losses,
+        }));
+      } catch (error) {
+        console.error("Failed to get league rankings:", error);
+        return [];
+      }
+    }),
+    updateTeamStats: adminProcedure.input(z.object({
+      userTeamId: z.number(),
+      totalPoints: z.number().optional(),
+      goalsFor: z.number().optional(),
+      goalsAgainst: z.number().optional(),
+      assists: z.number().optional(),
+      wins: z.number().optional(),
+      draws: z.number().optional(),
+      losses: z.number().optional(),
+    })).mutation(async ({ input }) => {
+      try {
+        const { userTeamId, ...stats } = input;
+        await updateTeamStatistics(userTeamId, stats);
+        return { success: true, message: 'تم تحديث الإحصائيات بنجاح' };
+      } catch (error) {
+        console.error("Failed to update team stats:", error);
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'فشل تحديث الإحصائيات' });
+      }
     }),
   }),
 });

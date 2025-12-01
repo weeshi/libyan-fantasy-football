@@ -97,3 +97,12 @@
 - [x] Create budget management dashboard
 - [x] Implement budget constraints validation
 - [x] Add transaction history page
+
+
+## Dynamic Leaderboard System
+- [x] Extend schema with team statistics tracking
+- [x] Create leaderboard calculation procedures
+- [x] Build leaderboard page with live rankings
+- [x] Add detailed team statistics display
+- [x] Implement league-specific rankings
+- [x] Add sorting and filtering options

@@ -83,8 +83,14 @@ export const userTeams = mysqlTable("userTeams", {
   userId: int("userId").notNull(),
   leagueId: int("leagueId").notNull(),
   teamName: varchar("teamName", { length: 255 }).notNull(),
-  budget: int("budget").default(100000000).notNull(), // Starting budget in currency units
+  budget: int("budget").default(100000000).notNull(),
   totalPoints: int("totalPoints").default(0).notNull(),
+  goalsFor: int("goalsFor").default(0).notNull(),
+  goalsAgainst: int("goalsAgainst").default(0).notNull(),
+  assists: int("assists").default(0).notNull(),
+  wins: int("wins").default(0).notNull(),
+  draws: int("draws").default(0).notNull(),
+  losses: int("losses").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
