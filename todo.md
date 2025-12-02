@@ -106,3 +106,7 @@
 - [x] Add detailed team statistics display
 - [x] Implement league-specific rankings
 - [x] Add sorting and filtering options
+
+
+## Libyan Football Clubs Data
+- [x] Add 10 Libyan football clubs to database
