@@ -4,7 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers, getLeagueLeaderboard, updateTeamStatistics } from "./db";
+import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers, getLeagueLeaderboard, updateTeamStatistics, getAllMatches, getMatchesByStatus, getUpcomingMatches, updateMatchResult } from "./db";
 
 // Admin-only procedure
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -253,6 +253,51 @@ export const appRouter = router({
       } catch (error) {
         console.error("Failed to update team stats:", error);
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'فشل تحديث الإحصائيات' });
+      }
+    }),
+  }),
+
+  matches: router({
+    all: publicProcedure.query(async () => {
+      try {
+        return await getAllMatches();
+      } catch (error) {
+        console.error("Failed to get all matches:", error);
+        return [];
+      }
+    }),
+    byStatus: publicProcedure.input(z.object({
+      status: z.enum(["scheduled", "live", "completed", "postponed"]),
+    })).query(async ({ input }) => {
+      try {
+        return await getMatchesByStatus(input.status);
+      } catch (error) {
+        console.error("Failed to get matches by status:", error);
+        return [];
+      }
+    }),
+    upcoming: publicProcedure.input(z.object({
+      days: z.number().optional(),
+    })).query(async ({ input }) => {
+      try {
+        return await getUpcomingMatches(input.days || 7);
+      } catch (error) {
+        console.error("Failed to get upcoming matches:", error);
+        return [];
+      }
+    }),
+    updateResult: adminProcedure.input(z.object({
+      matchId: z.number(),
+      homeScore: z.number(),
+      awayScore: z.number(),
+      status: z.enum(["scheduled", "live", "completed", "postponed"]),
+    })).mutation(async ({ input }) => {
+      try {
+        await updateMatchResult(input.matchId, input.homeScore, input.awayScore, input.status);
+        return { success: true, message: 'تم تحديث نتيجة المباراة بنجاح' };
+      } catch (error) {
+        console.error("Failed to update match result:", error);
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'فشل تحديث النتيجة' });
       }
     }),
   }),

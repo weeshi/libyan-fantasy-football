@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, userTeams, userTeamPlayers, players, leagues, transactions, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
+import { InsertUser, users, matches, userTeams, userTeamPlayers, players, leagues, transactions, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -330,5 +330,82 @@ export async function getUserTeamWithStats(userTeamId: number) {
   } catch (error) {
     console.error("[Database] Failed to get user team with stats:", error);
     return null;
+  }
+}
+
+
+// Matches functions
+export async function getAllMatches() {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db.select().from(matches).orderBy(matches.matchDate);
+  } catch (error) {
+    console.error("[Database] Failed to get all matches:", error);
+    return [];
+  }
+}
+
+export async function getMatchesByStatus(status: "scheduled" | "live" | "completed" | "postponed") {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(matches)
+      .where(eq(matches.status, status))
+      .orderBy(matches.matchDate);
+  } catch (error) {
+    console.error("[Database] Failed to get matches by status:", error);
+    return [];
+  }
+}
+
+export async function getUpcomingMatches(days: number = 7) {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + days);
+    return await db
+      .select()
+      .from(matches)
+      .where(
+        and(
+          eq(matches.status, "scheduled"),
+          lte(matches.matchDate, futureDate)
+        )
+      )
+      .orderBy(matches.matchDate);
+  } catch (error) {
+    console.error("[Database] Failed to get upcoming matches:", error);
+    return [];
+  }
+}
+
+export async function updateMatchResult(
+  matchId: number,
+  homeScore: number,
+  awayScore: number,
+  status: "scheduled" | "live" | "completed" | "postponed"
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  try {
+    await db
+      .update(matches)
+      .set({
+        homeScore,
+        awayScore,
+        status,
+        updatedAt: new Date(),
+      })
+      .where(eq(matches.id, matchId));
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to update match result:", error);
+    throw error;
   }
 }

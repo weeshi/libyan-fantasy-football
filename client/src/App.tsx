@@ -13,6 +13,7 @@ import CreateTeam from "./pages/CreateTeam";
 import AdminPlayerPrices from "./pages/AdminPlayerPrices";
 import PlayerTrading from "./pages/PlayerTrading";
 import Leaderboard from "./pages/Leaderboard";
+import Matches from "./pages/Matches";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -27,6 +28,7 @@ function Router() {
       <Route path={"/admin/player-prices"} component={AdminPlayerPrices} />
       <Route path={"/player-trading"} component={PlayerTrading} />
       <Route path={"/leaderboard"} component={Leaderboard} />
+      <Route path={"/matches"} component={Matches} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

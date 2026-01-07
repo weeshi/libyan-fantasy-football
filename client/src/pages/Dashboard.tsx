@@ -173,6 +173,11 @@ export default function Dashboard() {
                 جدول الترتيب
               </Button>
             </Link>
+            <Link href="/matches">
+              <Button className="bg-purple-600 hover:bg-purple-700">
+                جدول المباريات
+              </Button>
+            </Link>
           </div>
 
           {/* Admin Links */}

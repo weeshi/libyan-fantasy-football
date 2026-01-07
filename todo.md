@@ -74,11 +74,9 @@
 - [ ] Checkpoint before publishing
 - [ ] Deploy to production
 
-
 ## Bug Fixes
 - [x] Fix missing /create-team route (404 error)
 - [x] Create team creation page
-
 
 ## Database Integration
 - [x] Update schema with userTeams table
@@ -86,7 +84,6 @@
 - [x] Connect CreateTeam page to API
 - [x] Display user teams in Dashboard
 - [ ] Add team edit/delete functionality
-
 
 ## Advanced Budget & Trading System
 - [x] Create admin player price management page
@@ -98,7 +95,6 @@
 - [x] Implement budget constraints validation
 - [x] Add transaction history page
 
-
 ## Dynamic Leaderboard System
 - [x] Extend schema with team statistics tracking
 - [x] Create leaderboard calculation procedures
@@ -107,6 +103,12 @@
 - [x] Implement league-specific rankings
 - [x] Add sorting and filtering options
 
-
 ## Libyan Football Clubs Data
 - [x] Add 10 Libyan football clubs to database
+
+## Match Schedule System
+- [x] Create virtual match schedule for Libyan league
+- [x] Add match fixtures with dates and times
+- [x] Create matches page to display schedule
+- [x] Add match status filtering (scheduled, live, completed)
+- [x] Implement live match updates
