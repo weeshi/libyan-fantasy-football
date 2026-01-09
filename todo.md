@@ -122,3 +122,13 @@
 - [x] Update button colors to use accent color (green or gold)
 - [x] Add football field background pattern (low opacity)
 - [x] Update all UI text for game feel instead of admin feel
+
+
+## Phase 2: Enhance Visual Design and Add Game Elements
+- [x] Add football pitch background image (low opacity)
+- [x] Create Pitch component with 4 rows (GK, DEF, MID, ATT)
+- [x] Design Player Token component (kit, name, points)
+- [x] Implement automatic player distribution by position
+- [x] Replace team cards with visual pitch display
+- [x] Add kit colors for each team
+- [x] Implement responsive pitch layout
