@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useLocation } from "wouter";
-import { Edit2, Save, X } from "lucide-react";
+import { Edit2, Save, X, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -67,7 +67,10 @@ export default function AdminPlayerPrices() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-white">إدارة أسعار اللاعبين</h1>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+                <TrendingUp className="w-8 h-8 text-yellow-400" />
+                سوق الانتقالات
+              </h1>
               <p className="text-slate-400">تحديث أسعار اللاعبين في السوق</p>
             </div>
             <Link href="/dashboard">

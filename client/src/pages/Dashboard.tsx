@@ -33,7 +33,10 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-white">لوحة التحكم</h1>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+                <Trophy className="w-8 h-8 text-green-400" />
+                الملعب
+              </h1>
               <p className="text-slate-400">أهلاً بعودتك، {user?.name}!</p>
             </div>
             <Link href="/">
@@ -68,10 +71,10 @@ export default function Dashboard() {
 
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-400">إجمالي النقاط</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">رصيدك</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">0</div>
+              <div className="text-2xl font-bold text-green-400">0</div>
               <p className="text-xs text-slate-500 mt-1">النقاط هذا الموسم</p>
             </CardContent>
           </Card>
@@ -100,7 +103,7 @@ export default function Dashboard() {
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">فريقي</h2>
               <Link href="/create-team">
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button className="bg-green-600 hover:bg-green-700">
                   <Plus className="w-4 h-4 ml-2" />
                   إنشاء فريق
                 </Button>
@@ -132,7 +135,7 @@ export default function Dashboard() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {userTeams.map((team) => (
-                  <Card key={team.id} className="bg-slate-800 border-slate-700 hover:border-blue-500 transition">
+                  <Card key={team.id} className="bg-slate-800 border-slate-700 hover:border-green-500 transition">
                     <CardHeader>
                       <CardTitle className="text-white">{team.teamName}</CardTitle>
                       <CardDescription className="text-slate-400">

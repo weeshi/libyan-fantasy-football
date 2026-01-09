@@ -124,6 +124,22 @@
     @apply bg-background text-foreground;
     font-family: 'Cairo', 'Tajawal', sans-serif;
     direction: rtl;
+    background-image: 
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 49px,
+        rgba(255, 255, 255, 0.03) 49px,
+        rgba(255, 255, 255, 0.03) 50px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 49px,
+        rgba(255, 255, 255, 0.03) 49px,
+        rgba(255, 255, 255, 0.03) 50px
+      );
+    background-size: 50px 50px;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
