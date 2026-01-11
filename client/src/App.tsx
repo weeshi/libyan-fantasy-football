@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import TeamDetails from "./pages/TeamDetails";
 import Dashboard from "./pages/Dashboard";
 import PlayersManagement from "./pages/PlayersManagement";
 import LeaguesManagement from "./pages/LeaguesManagement";
@@ -25,6 +26,7 @@ function Router() {
       <Route path={"/leagues"} component={LeaguesManagement} />
       <Route path={"/scoring"} component={ScoringSystem} />
       <Route path={"/create-team"} component={CreateTeam} />
+      <Route path={"/team/:id"} component={TeamDetails} />
       <Route path={"/admin/player-prices"} component={AdminPlayerPrices} />
       <Route path={"/player-trading"} component={PlayerTrading} />
       <Route path={"/leaderboard"} component={Leaderboard} />

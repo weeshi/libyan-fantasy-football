@@ -4,6 +4,9 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { getDb } from "./db";
+import { userTeams, userTeamPlayers } from "../drizzle/schema";
+import { eq } from "drizzle-orm";
 import { getUserTeamsByUserId, createUserTeam, addPlayerToUserTeam, getUserTeamPlayers, getPlayerById, updatePlayerPrice, createTransaction, getTransactionsByUserTeam, updateUserTeamBudget, getAllPlayers, getLeagueLeaderboard, updateTeamStatistics, getAllMatches, getMatchesByStatus, getUpcomingMatches, updateMatchResult } from "./db";
 
 // Admin-only procedure
@@ -140,6 +143,21 @@ export const appRouter = router({
       if (!ctx.user) return null;
       const teamPlayers = await getUserTeamPlayers(input.id);
       return { id: input.id, players: teamPlayers };
+    }),
+    delete: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
+      if (!ctx.user) throw new TRPCError({ code: 'UNAUTHORIZED' });
+      try {
+        const db = await getDb();
+        if (!db) throw new Error('Database not available');
+        // Delete user team players first
+        await db.delete(userTeamPlayers).where(eq(userTeamPlayers.userTeamId, input.id));
+        // Delete user team
+        await db.delete(userTeams).where(eq(userTeams.id, input.id));
+        return { success: true };
+      } catch (error) {
+        console.error('Failed to delete team:', error);
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'فشل في حذف الفريق' });
+      }
     }),
     buyPlayer: protectedProcedure.input(z.object({
       userTeamId: z.number(),

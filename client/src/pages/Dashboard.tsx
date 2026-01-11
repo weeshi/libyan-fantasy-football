@@ -174,11 +174,31 @@ export default function Dashboard() {
                       </Card>
                     </div>
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-green-600 hover:bg-green-700">
-                        عرض التفاصيل
-                      </Button>
-                      <Button variant="outline" className="flex-1">
-                        تعديل
+                      <Link href={`/team/${team.id}`} className="flex-1">
+                        <Button className="w-full bg-green-600 hover:bg-green-700">
+                          عرض التفاصيل
+                        </Button>
+                      </Link>
+                      <Link href={`/team/${team.id}/edit`} className="flex-1">
+                        <Button variant="outline" className="w-full">
+                          تعديل
+                        </Button>
+                      </Link>
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        className="px-3"
+                        onClick={() => {
+                          if (confirm('هل أنت متأكد من حذف هذا الفريق؟')) {
+                            trpc.userTeams.delete.useMutation({
+                              onSuccess: () => {
+                                window.location.reload();
+                              }
+                            }).mutate({ id: team.id });
+                          }
+                        }}
+                      >
+                        حذف
                       </Button>
                     </div>
                   </div>

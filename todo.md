@@ -132,3 +132,12 @@
 - [x] Replace team cards with visual pitch display
 - [x] Add kit colors for each team
 - [x] Implement responsive pitch layout
+
+
+## Bug Fixes and Missing Features
+- [x] Fix "عرض التفاصيل" button functionality
+- [x] Fix "تعديل" button functionality
+- [x] Add "حذف" button for team deletion
+- [x] Create team details page
+- [ ] Create team edit page
+- [x] Implement team deletion with confirmation
