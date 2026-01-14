@@ -148,3 +148,10 @@
 - [x] Calculate appropriate prices based on player position and experience
 - [x] Insert all teams and players into database
 - [ ] Test player selection in create team page
+
+
+## Database Cleanup & Player Display
+- [x] Remove duplicate teams from database
+- [x] Fix player display in dashboard/team creation
+- [x] Verify all 150 players are showing correctly
+- [x] Test team creation with real player data

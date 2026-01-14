@@ -46,11 +46,12 @@ export const appRouter = router({
 
   players: router({
     list: publicProcedure.query(async () => {
-      // Return list of all players
       return [];
     }),
+    getAll: publicProcedure.query(async () => {
+      return await getAllPlayers();
+    }),
     byTeam: publicProcedure.input(z.object({ teamId: z.number() })).query(async ({ input }) => {
-      // Return players for a specific team
       return [];
     }),
   }),

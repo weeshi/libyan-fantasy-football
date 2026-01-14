@@ -9,8 +9,9 @@ import { trpc } from "@/lib/trpc";
 interface Player {
   id: number;
   name: string;
-  team: string;
+  teamName: string;
   position: string;
+  price: number;
 }
 
 export default function CreateTeam() {
@@ -19,11 +20,32 @@ export default function CreateTeam() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [loadingPlayers, setLoadingPlayers] = useState(true);
   const [formData, setFormData] = useState({
     teamName: "",
     teamDescription: "",
     selectedPlayers: [] as number[],
   });
+
+  // Fetch all players from database
+  const { data: playersData } = trpc.players.getAll.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+
+  useEffect(() => {
+    if (playersData) {
+      const formattedPlayers = playersData.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        teamName: p.team?.name || "Unknown",
+        position: p.position,
+        price: p.price,
+      }));
+      setPlayers(formattedPlayers);
+      setLoadingPlayers(false);
+    }
+  }, [playersData]);
 
   const createTeamMutation = trpc.userTeams.create.useMutation({
     onSuccess: () => {
@@ -44,21 +66,6 @@ export default function CreateTeam() {
   if (!isAuthenticated) {
     return null;
   }
-
-  const players: Player[] = [
-    { id: 1, name: "أحمد علي", team: "الأهلي بنغازي", position: "حارس مرمى" },
-    { id: 2, name: "محمد سالم", team: "الأهلي بنغازي", position: "مدافع" },
-    { id: 3, name: "علي محمود", team: "الأهلي بنغازي", position: "لاعب وسط" },
-    { id: 4, name: "خالد حسن", team: "الأهلي بنغازي", position: "مهاجم" },
-    { id: 5, name: "سارة عمر", team: "الهلال", position: "مدافع" },
-    { id: 6, name: "فاطمة أحمد", team: "الهلال", position: "لاعب وسط" },
-    { id: 7, name: "ياسر محمد", team: "الأهلي طرابلس", position: "حارس مرمى" },
-    { id: 8, name: "إبراهيم علي", team: "الأهلي طرابلس", position: "مدافع" },
-    { id: 9, name: "عمر حسين", team: "الزاوية", position: "لاعب وسط" },
-    { id: 10, name: "محمود أحمد", team: "الزاوية", position: "مهاجم" },
-    { id: 11, name: "علاء الدين", team: "اتحاد بنغازي", position: "مدافع" },
-    { id: 12, name: "سليم عبدالله", team: "اتحاد بنغازي", position: "لاعب وسط" },
-  ];
 
   const handleSelectPlayer = (playerId: number) => {
     if (formData.selectedPlayers.includes(playerId)) {
@@ -91,6 +98,16 @@ export default function CreateTeam() {
         setIsLoading(false);
       }
     }
+  };
+
+  const getPositionArabic = (position: string) => {
+    const positionMap: Record<string, string> = {
+      "GK": "حارس مرمى",
+      "DEF": "مدافع",
+      "MID": "لاعب وسط",
+      "FWD": "مهاجم",
+    };
+    return positionMap[position] || position;
   };
 
   return (
@@ -180,32 +197,42 @@ export default function CreateTeam() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {players.map(player => (
-                    <button
-                      key={player.id}
-                      onClick={() => handleSelectPlayer(player.id)}
-                      className={`w-full text-right p-3 rounded border transition ${
-                        formData.selectedPlayers.includes(player.id)
-                          ? "bg-blue-600 border-blue-500"
-                          : "bg-slate-700 border-slate-600 hover:border-slate-500"
-                      }`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="text-white font-semibold">{player.name}</p>
-                          <p className="text-slate-300 text-sm">{player.position}</p>
-                          <p className="text-slate-400 text-xs">{player.team}</p>
+                {loadingPlayers ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
+                    <span className="text-slate-400 mr-2">جاري تحميل اللاعبين...</span>
+                  </div>
+                ) : players.length === 0 ? (
+                  <p className="text-slate-400 text-center py-8">لا توجد لاعبين متاحين</p>
+                ) : (
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {players.map(player => (
+                      <button
+                        key={player.id}
+                        onClick={() => handleSelectPlayer(player.id)}
+                        className={`w-full text-right p-3 rounded border transition ${
+                          formData.selectedPlayers.includes(player.id)
+                            ? "bg-green-600 border-green-500"
+                            : "bg-slate-700 border-slate-600 hover:border-slate-500"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-white font-semibold">{player.name}</p>
+                            <p className="text-slate-300 text-sm">{getPositionArabic(player.position)}</p>
+                            <p className="text-slate-400 text-xs">{player.teamName}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-slate-200 text-sm font-semibold">{player.price.toFixed(1)}M</p>
+                            {formData.selectedPlayers.includes(player.id) && (
+                              <span className="text-white font-bold">✓</span>
+                            )}
+                          </div>
                         </div>
-                        <div className="text-right">
-                          {formData.selectedPlayers.includes(player.id) && (
-                            <span className="text-green-400 font-bold">✓</span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -251,19 +278,20 @@ export default function CreateTeam() {
                     </div>
                   )}
                   <div>
+                    <p className="text-slate-400 text-sm">عدد اللاعبين</p>
+                    <p className="text-white font-semibold">{formData.selectedPlayers.length} لاعب</p>
+                  </div>
+                  <div>
                     <p className="text-slate-400 text-sm mb-2">اللاعبون المختارون</p>
                     <div className="space-y-2">
                       {formData.selectedPlayers.map(playerId => {
                         const player = players.find(p => p.id === playerId);
-                        return (
-                          <div key={playerId} className="flex justify-between items-center p-2 bg-slate-700 rounded">
-                            <div>
-                              <p className="text-white">{player?.name}</p>
-                              <p className="text-slate-400 text-sm">{player?.position}</p>
-                            </div>
-                            <p className="text-slate-400 text-sm">{player?.team}</p>
+                        return player ? (
+                          <div key={playerId} className="bg-slate-700 p-2 rounded text-sm text-slate-300">
+                            <span>{player.name}</span>
+                            <span className="text-slate-500 mr-2">({getPositionArabic(player.position)})</span>
                           </div>
-                        );
+                        ) : null;
                       })}
                     </div>
                   </div>
@@ -275,7 +303,6 @@ export default function CreateTeam() {
               <Button
                 variant="outline"
                 onClick={() => setStep(2)}
-                disabled={isLoading}
               >
                 السابق
               </Button>
@@ -286,7 +313,7 @@ export default function CreateTeam() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin ml-2" />
                     جاري الإنشاء...
                   </>
                 ) : (

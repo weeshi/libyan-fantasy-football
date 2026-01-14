@@ -1,0 +1,72 @@
+{
+  "query": "\n-- Delete teams that have no players (the old duplicates)\nDELETE FROM teams WHERE id NOT IN (\n  SELECT DISTINCT teamId FROM players\n) AND name IN (\n  'الاتحاد بنغازي', 'الثورة الزاوية', 'الجيش طرابلس', 'الشرطة طرابلس', \n  'الفيصلي الزاوية', 'النصر الزاوية', 'الهلال البيضاوي', 'الوحدة سرت'\n);\n\n-- Verify final teams\nSELECT id, name, city FROM teams ORDER BY name;\n\n-- Final verification of players by team\nSELECT t.name, COUNT(p.id) as player_count \nFROM teams t \nLEFT JOIN players p ON t.id = p.teamId \nGROUP BY t.name \nORDER BY t.name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3Riu8mF2GzoV7BW.root --database nrRUr2aKVqWSqPWU5ex7Ey --execute \n-- Delete teams that have no players (the old duplicates)\nDELETE FROM teams WHERE id NOT IN (\n  SELECT DISTINCT teamId FROM players\n) AND name IN (\n  'الاتحاد بنغازي', 'الثورة الزاوية', 'الجيش طرابلس', 'الشرطة طرابلس', \n  'الفيصلي الزاوية', 'النصر الزاوية', 'الهلال البيضاوي', 'الوحدة سرت'\n);\n\n-- Verify final teams\nSELECT id, name, city FROM teams ORDER BY name;\n\n-- Final verification of players by team\nSELECT t.name, COUNT(p.id) as player_count \nFROM teams t \nLEFT JOIN players p ON t.id = p.teamId \nGROUP BY t.name \nORDER BY t.name;\n",
+  "rows": [
+    {
+      "id": "1",
+      "name": "الأهلي بنغازي",
+      "city": "بنغازي"
+    },
+    {
+      "id": "2",
+      "name": "الأهلي طرابلس",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30004",
+      "name": "الاتحاد",
+      "city": "بنغازي"
+    },
+    {
+      "id": "30008",
+      "name": "الثورة",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30009",
+      "name": "الجيش",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30007",
+      "name": "الشرطة",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30006",
+      "name": "الفيصلي",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30005",
+      "name": "النصر",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30003",
+      "name": "الهلال",
+      "city": "البيضاء"
+    },
+    {
+      "id": "30010",
+      "name": "الوحدة",
+      "city": "سرت"
+    }
+  ],
+  "messages": [
+    "name\tplayer_count",
+    "الأهلي بنغازي\t15",
+    "الأهلي طرابلس\t15",
+    "الاتحاد\t15",
+    "الثورة\t15",
+    "الجيش\t15",
+    "الشرطة\t15",
+    "الفيصلي\t15",
+    "النصر\t15",
+    "الهلال\t15",
+    "الوحدة\t15"
+  ],
+  "stdout": "id\tname\tcity\n1\tالأهلي بنغازي\tبنغازي\n2\tالأهلي طرابلس\tطرابلس\n30004\tالاتحاد\tبنغازي\n30008\tالثورة\tالزاوية\n30009\tالجيش\tطرابلس\n30007\tالشرطة\tطرابلس\n30006\tالفيصلي\tالزاوية\n30005\tالنصر\tالزاوية\n30003\tالهلال\tالبيضاء\n30010\tالوحدة\tسرت\nname\tplayer_count\nالأهلي بنغازي\t15\nالأهلي طرابلس\t15\nالاتحاد\t15\nالثورة\t15\nالجيش\t15\nالشرطة\t15\nالفيصلي\t15\nالنصر\t15\nالهلال\t15\nالوحدة\t15\n",
+  "stderr": "",
+  "execution_time_ms": 68
+}

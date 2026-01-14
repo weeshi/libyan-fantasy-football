@@ -1,0 +1,122 @@
+{
+  "query": "\n-- Delete duplicate teams, keeping only the ones with the most players\nDELETE t1 FROM teams t1\nINNER JOIN teams t2 \nWHERE t1.id > t2.id \nAND t1.name = t2.name;\n\n-- Verify teams are now unique\nSELECT id, name, city FROM teams ORDER BY name;\n\n-- Count total players\nSELECT COUNT(*) as total_players FROM players;\n\n-- Show players by team\nSELECT t.name, COUNT(p.id) as player_count \nFROM teams t \nLEFT JOIN players p ON t.id = p.teamId \nGROUP BY t.name \nORDER BY t.name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3Riu8mF2GzoV7BW.root --database nrRUr2aKVqWSqPWU5ex7Ey --execute \n-- Delete duplicate teams, keeping only the ones with the most players\nDELETE t1 FROM teams t1\nINNER JOIN teams t2 \nWHERE t1.id > t2.id \nAND t1.name = t2.name;\n\n-- Verify teams are now unique\nSELECT id, name, city FROM teams ORDER BY name;\n\n-- Count total players\nSELECT COUNT(*) as total_players FROM players;\n\n-- Show players by team\nSELECT t.name, COUNT(p.id) as player_count \nFROM teams t \nLEFT JOIN players p ON t.id = p.teamId \nGROUP BY t.name \nORDER BY t.name;\n",
+  "rows": [
+    {
+      "id": "1",
+      "name": "الأهلي بنغازي",
+      "city": "بنغازي"
+    },
+    {
+      "id": "2",
+      "name": "الأهلي طرابلس",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30004",
+      "name": "الاتحاد",
+      "city": "بنغازي"
+    },
+    {
+      "id": "7",
+      "name": "الاتحاد بنغازي",
+      "city": "بنغازي"
+    },
+    {
+      "id": "30008",
+      "name": "الثورة",
+      "city": "الزاوية"
+    },
+    {
+      "id": "8",
+      "name": "الثورة الزاوية",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30009",
+      "name": "الجيش",
+      "city": "طرابلس"
+    },
+    {
+      "id": "9",
+      "name": "الجيش طرابلس",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30007",
+      "name": "الشرطة",
+      "city": "طرابلس"
+    },
+    {
+      "id": "6",
+      "name": "الشرطة طرابلس",
+      "city": "طرابلس"
+    },
+    {
+      "id": "30006",
+      "name": "الفيصلي",
+      "city": "الزاوية"
+    },
+    {
+      "id": "5",
+      "name": "الفيصلي الزاوية",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30005",
+      "name": "النصر",
+      "city": "الزاوية"
+    },
+    {
+      "id": "4",
+      "name": "النصر الزاوية",
+      "city": "الزاوية"
+    },
+    {
+      "id": "30003",
+      "name": "الهلال",
+      "city": "البيضاء"
+    },
+    {
+      "id": "3",
+      "name": "الهلال البيضاوي",
+      "city": "البيضاء"
+    },
+    {
+      "id": "30010",
+      "name": "الوحدة",
+      "city": "سرت"
+    },
+    {
+      "id": "10",
+      "name": "الوحدة سرت",
+      "city": "سرت"
+    }
+  ],
+  "messages": [
+    "total_players",
+    "150",
+    "name\tplayer_count",
+    "الأهلي بنغازي\t15",
+    "الأهلي طرابلس\t15",
+    "الاتحاد\t15",
+    "الاتحاد بنغازي\t0",
+    "الثورة\t15",
+    "الثورة الزاوية\t0",
+    "الجيش\t15",
+    "الجيش طرابلس\t0",
+    "الشرطة\t15",
+    "الشرطة طرابلس\t0",
+    "الفيصلي\t15",
+    "الفيصلي الزاوية\t0",
+    "النصر\t15",
+    "النصر الزاوية\t0",
+    "الهلال\t15",
+    "الهلال البيضاوي\t0",
+    "الوحدة\t15",
+    "الوحدة سرت\t0"
+  ],
+  "stdout": "id\tname\tcity\n1\tالأهلي بنغازي\tبنغازي\n2\tالأهلي طرابلس\tطرابلس\n30004\tالاتحاد\tبنغازي\n7\tالاتحاد بنغازي\tبنغازي\n30008\tالثورة\tالزاوية\n8\tالثورة الزاوية\tالزاوية\n30009\tالجيش\tطرابلس\n9\tالجيش طرابلس\tطرابلس\n30007\tالشرطة\tطرابلس\n6\tالشرطة طرابلس\tطرابلس\n30006\tالفيصلي\tالزاوية\n5\tالفيصلي الزاوية\tالزاوية\n30005\tالنصر\tالزاوية\n4\tالنصر الزاوية\tالزاوية\n30003\tالهلال\tالبيضاء\n3\tالهلال البيضاوي\tالبيضاء\n30010\tالوحدة\tسرت\n10\tالوحدة سرت\tسرت\ntotal_players\n150\nname\tplayer_count\nالأهلي بنغازي\t15\nالأهلي طرابلس\t15\nالاتحاد\t15\nالاتحاد بنغازي\t0\nالثورة\t15\nالثورة الزاوية\t0\nالجيش\t15\nالجيش طرابلس\t0\nالشرطة\t15\nالشرطة طرابلس\t0\nالفيصلي\t15\nالفيصلي الزاوية\t0\nالنصر\t15\nالنصر الزاوية\t0\nالهلال\t15\nالهلال البيضاوي\t0\nالوحدة\t15\nالوحدة سرت\t0\n",
+  "stderr": "",
+  "execution_time_ms": 70
+}
