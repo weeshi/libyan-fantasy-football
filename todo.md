@@ -141,3 +141,10 @@
 - [x] Create team details page
 - [ ] Create team edit page
 - [x] Implement team deletion with confirmation
+
+
+## Seed Libyan Football Players Data
+- [x] Parse Excel file with all Libyan teams and players
+- [x] Calculate appropriate prices based on player position and experience
+- [x] Insert all teams and players into database
+- [ ] Test player selection in create team page
