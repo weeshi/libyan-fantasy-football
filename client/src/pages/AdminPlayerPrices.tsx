@@ -109,7 +109,7 @@ export default function AdminPlayerPrices() {
                             <span className="text-slate-400 text-sm">السعر الجديد:</span>
                             <input
                               type="number"
-                              value={newPrices[player.id] || player.marketValue}
+                              value={newPrices[player.id] || player.price}
                               onChange={(e) =>
                                 setNewPrices({
                                   ...newPrices,
@@ -141,7 +141,7 @@ export default function AdminPlayerPrices() {
                         <>
                           <div className="text-right">
                             <p className="text-white font-semibold">
-                              {(player.marketValue / 1000000).toFixed(2)}M
+                              {(player.price / 1000000).toFixed(2)}M
                             </p>
                             <p className="text-slate-400 text-xs">السعر الحالي</p>
                           </div>
@@ -149,7 +149,7 @@ export default function AdminPlayerPrices() {
                             size="sm"
                             onClick={() => {
                               setEditingId(player.id);
-                              setNewPrices({ [player.id]: player.marketValue });
+                              setNewPrices({ [player.id]: player.price });
                             }}
                             className="bg-blue-600 hover:bg-blue-700"
                           >

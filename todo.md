@@ -155,3 +155,11 @@
 - [x] Fix player display in dashboard/team creation
 - [x] Verify all 150 players are showing correctly
 - [x] Test team creation with real player data
+
+
+## API Data Fetching Fixes
+- [x] Fix teams.list procedure to fetch from database
+- [x] Fix players.list and players.getAll procedures to fetch from database
+- [x] Fix leagues.list procedure to fetch from database
+- [x] Verify all data displays correctly in UI
+- [x] Test team creation with real database data

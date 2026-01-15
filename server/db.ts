@@ -1,6 +1,6 @@
 import { eq, and, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, matches, userTeams, userTeamPlayers, players, leagues, transactions, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
+import { InsertUser, users, matches, userTeams, userTeamPlayers, players, leagues, transactions, teams, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -119,7 +119,18 @@ export async function getAllPlayers() {
   const db = await getDb();
   if (!db) return [];
   try {
-    return await db.select().from(players).limit(1000);
+    return await db.select({
+      id: players.id,
+      name: players.name,
+      position: players.position,
+      price: players.marketValue,
+      teamId: players.teamId,
+      team: {
+        id: teams.id,
+        name: teams.name,
+        city: teams.city,
+      },
+    }).from(players).innerJoin(teams, eq(players.teamId, teams.id)).limit(1000);
   } catch (error) {
     console.error("[Database] Failed to get all players:", error);
     return [];
