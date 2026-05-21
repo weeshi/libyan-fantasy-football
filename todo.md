@@ -1,165 +1,444 @@
-# Libyan Fantasy Football - Project TODO
+# طَلْبه - خطة التطوير الشاملة
+# Talba - Comprehensive Development Plan
 
-## Core Features
-- [x] Database schema for players, teams, leagues, and user teams
-- [ ] Player statistics and scoring system
-- [ ] Team management (create, edit, delete user teams)
-- [ ] League management and standings
-- [ ] Player auction/draft system
-- [ ] Weekly scoring and leaderboard
-- [ ] User dashboard with team overview
-- [ ] Player search and filtering
-- [ ] Team lineup management
-- [ ] Bench management
-- [ ] Transfer system (buy/sell players)
-- [ ] User profile and settings
+**آخر تحديث:** May 21, 2026  
+**الحالة:** جاري التطوير  
+**الإصدار المستهدف:** 2.0.0
 
-## UI/Frontend
-- [x] Landing page with game overview
-- [x] Authentication integration (already built-in)
-- [x] Dashboard layout for authenticated users
-- [ ] Team creation wizard
-- [ ] Player browse/search interface
-- [ ] Team management page
-- [ ] Leaderboard page
-- [ ] Match schedule and results page
-- [ ] User profile page
-- [x] Responsive design for mobile
+---
 
-## Backend API
-- [x] Player management endpoints (basic)
-- [x] Team CRUD endpoints (basic)
-- [x] League endpoints (basic)
-- [ ] Scoring calculation logic
-- [ ] Leaderboard generation
-- [ ] Transfer/auction endpoints
-- [x] User team endpoints (basic)
+## 📊 ملخص المشروع / Project Summary
 
-## Testing
-- [x] Unit tests for API procedures
-- [ ] Unit tests for scoring system
-- [ ] Integration tests for team creation
+**المهام الأساسية:** 16 مهمة رئيسية  
+**المهام التكميلية:** 12 مهمة إضافية  
+**مهام الإصلاح:** 8 مهام إصلاح وتحسين  
+**إجمالي المهام:** 36 مهمة
 
-## Localization & RTL
-- [x] Translate all content to Arabic
-- [x] Implement RTL layout support
-- [x] Add Arabic font (Tajawal or Cairo)
-- [x] Rename app to "طَلْبه"
-- [x] Update all UI text to Arabic
-- [x] Test RTL on all pages
+---
 
-## New Implementation Tasks
-- [x] Step 1: Player Management System (for all users)
-  - [x] Create players management page
-  - [x] Add/edit/delete players UI
-  - [x] Display player list with search and filter
-  - [x] Add player statistics display
-  
-- [x] Step 2: League System with Admin Controls
-  - [x] Display all available leagues
-  - [x] Add search and filter for leagues
-  - [x] Join league functionality
-  - [x] Admin-only league creation
-  - [x] League details and standings
-  
-- [x] Step 3: Manual Scoring System
-  - [x] Admin panel for entering match results
-  - [x] Player performance input form
-  - [x] Automatic point calculation
-  - [x] Update leaderboard after scoring
-  - [x] View scoring history
+# 🔴 المهام الأساسية (CRITICAL & HIGH PRIORITY)
+## Core Tasks - Must Complete
 
-## Deployment
-- [ ] Final testing and bug fixes
-- [ ] Checkpoint before publishing
-- [ ] Deploy to production
+### المرحلة 1: نظام الترتيق المتقدم
+- [ ] تحديث جدول النقاط في قاعدة البيانات
+- [ ] إضافة جدول `scoring_rules` مع جميع أنواع النقاط
+- [ ] إنشاء migration للجدول الجديد
+- [ ] إضافة بيانات الترتيق الافتراضية
+- [ ] إنشاء `calculatePlayerPoints()` procedure متقدم
+- [ ] حساب نقاط دقائق اللعب (1-2 نقطة)
+- [ ] حساب نقاط الأهداف (حسب المركز: 6/5/4/10)
+- [ ] حساب نقاط التمريرات الحاسمة (3 نقاط)
+- [ ] حساب نقاط الأوراق النظيفة (4 للحارس/المدافع، 1 للوسط)
+- [ ] حساب نقاط الأداء الدفاعي (2 نقطة لكل 10 تحركات)
+- [ ] حساب نقاط إنقاذات الحارس (1 نقطة لكل 3 إنقاذات)
+- [ ] حساب عقوبات البطاقات (-1 صفراء، -3 حمراء)
+- [ ] حساب عقوبات الأهداف المستقبلة (-1 لكل هدفين)
+- [ ] حساب نقاط المكافأة (1-3 نقاط)
+- [ ] إضافة اختبارات Vitest للحسابات
+- [ ] التحقق من الدقة مع أمثلة من FPL
+- [ ] إنشاء صفحة `AdminScoringRules` لإدارة القواعس
+- [ ] إضافة جدول بجميع قواعد النقاط
+- [ ] السماح بتعديل النقاط (للمسؤولين فقط)
+- [ ] إضافة زر "إعادة تعيين" للقيم الافتراضية
+- [ ] تحديث `calculateTeamPoints()` لاستخدام النظام الجديد
+- [ ] تحديث لوحة المعلومات لعرض النقاط الجديدة
+- [ ] تحديث الترتيب العام
+- [ ] اختبار حساب النقاط مع 10 حالات اختبار مختلفة
+- [ ] التحقق من عدم وجود أخطاء في الحساب
 
-## Bug Fixes
-- [x] Fix missing /create-team route (404 error)
-- [x] Create team creation page
+### المرحلة 2: موعد نهائي للانتقالات
+- [ ] إضافة حقل `transferDeadline` في جدول `gameweeks`
+- [ ] إضافة حقل `isTransferWindowOpen` في جدول `gameweeks`
+- [ ] إنشاء migration للحقول الجديدة
+- [ ] إنشاء `checkTransferDeadline()` procedure
+- [ ] التحقق من أن الموعد الحالي قبل الموعد النهائي
+- [ ] إرجاع رسالة خطأ إذا تجاوز الموعد
+- [ ] إرجاع الوقت المتبقي للاعب
+- [ ] إضافة عرض "الوقت المتبقي" في صفحة الانتقالات
+- [ ] إضافة تحذير عند اقتراب الموعد النهائي
+- [ ] إضافة رسالة خطأ واضحة عند تجاوز الموعد
+- [ ] إضافة عداد تنازلي (Countdown Timer)
+- [ ] إشعار قبل ساعة واحدة من الموعد النهائي
+- [ ] إشعار قبل 15 دقيقة
+- [ ] إشعار عند إغلاق نافذة الانتقالات
+- [ ] اختبار الانتقالات قبل الموعد النهائي (يجب أن تنجح)
+- [ ] اختبار الانتقالات بعد الموعد النهائي (يجب أن تفشل)
+- [ ] اختبار الإشعارات
 
-## Database Integration
-- [x] Update schema with userTeams table
-- [x] Add team creation procedures to backend
-- [x] Connect CreateTeam page to API
-- [x] Display user teams in Dashboard
-- [ ] Add team edit/delete functionality
+### المرحلة 3: نظام الرقائق الاستراتيجية
+- [ ] إضافة جدول `user_chips` في قاعدة البيانات
+- [ ] إضافة حقول: `userId`, `chipType`, `isUsed`, `usedInGameweek`
+- [ ] إضافة حقل `activeChip` في جدول `user_teams`
+- [ ] إنشاء migration للجداول الجديدة
+- [ ] إنشاء `chips.getAvailable()` procedure
+- [ ] إنشاء `chips.use()` procedure
+- [ ] إنشاء `chips.reset()` procedure
+- [ ] إنشاء `chips.validateUsage()` procedure
+- [ ] تطبيق تأثير Triple Captain (مضاعفة 3x)
+- [ ] تحديث `calculateTeamPoints()` لتطبيق التأثير
+- [ ] اختبار Triple Captain مع أمثلة مختلفة
+- [ ] تطبيق تأثير Wildcard (تغيير بدون عقوبة)
+- [ ] السماح بتغيير غير محدود للاعبين
+- [ ] عدم خصم نقاط للانتقالات الإضافية
+- [ ] إعادة تعيين بعد انتهاء الأسبوع
+- [ ] تطبيق تأثير Bench Boost (استخدام البدلاء)
+- [ ] حساب نقاط جميع اللاعبين (بما فيهم البدلاء)
+- [ ] اختبار مع فريق كامل
+- [ ] تطبيق تأثير Free Hit (تغيير مؤقت)
+- [ ] السماح بتغيير الفريق مؤقتاً
+- [ ] إعادة الفريق الأصلي بعد الأسبوع
+- [ ] إنشاء مكون `ChipsSelector`
+- [ ] عرض الرقائق المتاحة والمستخدمة
+- [ ] إضافة modal لتأكيد استخدام الرقاقة
+- [ ] عرض تحذير عند استخدام آخر رقاقة
+- [ ] تحديث Dashboard لعرض الرقائق
+- [ ] اختبار كل رقاقة بشكل منفصل
+- [ ] اختبار عدم استخدام نفس الرقاقة مرتين
+- [ ] اختبار تأثير الرقائق على النقاط
+- [ ] اختبار الحالات الحدية
 
-## Advanced Budget & Trading System
-- [x] Create admin player price management page
-- [x] Implement player price update procedures
-- [x] Create player trading/transfer page
-- [x] Implement buy/sell player procedures
-- [x] Add transaction history tracking
-- [x] Create budget management dashboard
-- [x] Implement budget constraints validation
-- [x] Add transaction history page
+### المرحلة 4: نظام Head-to-Head
+- [ ] إضافة حقل `leagueType` في جدول `leagues`
+- [ ] إضافة جدول `h2h_matches`
+- [ ] إضافة جدول `h2h_standings`
+- [ ] إنشاء migrations
+- [ ] إنشاء `h2h.createLeague()` procedure
+- [ ] إنشاء `h2h.generateMatches()` procedure
+- [ ] إنشاء `h2h.calculateResults()` procedure
+- [ ] إنشاء `h2h.getStandings()` procedure
+- [ ] إنشاء `h2h.getMatchHistory()` procedure
+- [ ] تطوير خوارزمية توليد المباريات الأسبوعية
+- [ ] تقسيم الفرق إلى أزواج عشوائية
+- [ ] تجنب تكرار نفس المباريات
+- [ ] التعامل مع عدد فردي من الفرق
+- [ ] اختبار الخوارزمية مع أحجام مختلفة
+- [ ] مقارنة نقاط الفريقين
+- [ ] منح 3 نقاط للفوز، 1 للتعادل، 0 للخسارة
+- [ ] تحديث الترتيب تلقائياً
+- [ ] إنشاء صفحة `H2HLeague`
+- [ ] عرض الترتيب الحالي
+- [ ] عرض المباريات الأسبوعية
+- [ ] عرض النتائج السابقة
+- [ ] عرض إحصائيات الفريق
+- [ ] إنشاء مكون `H2HMatch`
+- [ ] اختبار توليد المباريات
+- [ ] اختبار حساب النتائج
+- [ ] اختبار الترتيب
+- [ ] اختبار مع أحجام مختلفة من الفرق
 
-## Dynamic Leaderboard System
-- [x] Extend schema with team statistics tracking
-- [x] Create leaderboard calculation procedures
-- [x] Build leaderboard page with live rankings
-- [x] Add detailed team statistics display
-- [x] Implement league-specific rankings
-- [x] Add sorting and filtering options
+### المرحلة 5: نظام الكأس
+- [ ] إضافة جدول `cup_competitions`
+- [ ] إضافة جدول `cup_rounds`
+- [ ] إضافة جدول `cup_matches`
+- [ ] إنشاء migrations
+- [ ] إنشاء `cup.createCup()` procedure
+- [ ] إنشاء `cup.performDraw()` procedure
+- [ ] إنشاء `cup.generateRound()` procedure
+- [ ] إنشاء `cup.calculateResults()` procedure
+- [ ] إنشاء `cup.getStandings()` procedure
+- [ ] إنشاء `cup.getMatchHistory()` procedure
+- [ ] تطوير خوارزمية القرعة العشوائية
+- [ ] رسم عشوائي للفرق المتبقية
+- [ ] تجنب تكرار نفس المباريات
+- [ ] تطوير نظام الجولات
+- [ ] الجولة الأولى: جميع الفرق
+- [ ] الجولات التالية: الفائزون فقط
+- [ ] النهائي: آخر فريقين
+- [ ] إنشاء صفحة `CupCompetition`
+- [ ] عرض حالة الكأس الحالية
+- [ ] عرض الجولة الحالية
+- [ ] عرض المباريات المتبقية
+- [ ] عرض الفائز (إن وجد)
+- [ ] إنشاء مكون `CupBracket`
+- [ ] عرض شجرة الكأس
+- [ ] عرض المباريات في كل جولة
+- [ ] عرض النتائج
+- [ ] اختبار القرعة العشوائية
+- [ ] اختبار توليد الجولات
+- [ ] اختبار حساب النتائج
+- [ ] اختبار النهائي
 
-## Libyan Football Clubs Data
-- [x] Add 10 Libyan football clubs to database
+### المرحلة 6: تحديثات حية وإشعارات
+- [ ] تثبيت مكتبة `socket.io` أو `ws`
+- [ ] إنشاء server للـ WebSocket
+- [ ] إعداد الاتصال من الـ client
+- [ ] اختبار الاتصال الأساسي
+- [ ] إنشاء `LiveMatchUpdates` service
+- [ ] تحديثات نتائج المباريات
+- [ ] تحديثات النقاط الفورية
+- [ ] تحديثات الأهداف والبطاقات
+- [ ] بث التحديثات إلى جميع العملاء
+- [ ] تحديث واجهة المستخدم تلقائياً
+- [ ] إنشاء `NotificationService`
+- [ ] إشعارات الأهداف
+- [ ] إشعارات البطاقات
+- [ ] إشعارات تغيير الترتيب
+- [ ] إشعارات المباريات
+- [ ] حفظ الإشعارات في قاعدة البيانات
+- [ ] عرض الإشعارات في واجهة المستخدم
+- [ ] إنشاء صفحة `NotificationCenter`
+- [ ] عرض جميع الإشعارات
+- [ ] عرض الإشعارات غير المقروءة
+- [ ] خيارات التصفية
+- [ ] حذف الإشعارات
+- [ ] إنشاء مكون `NotificationBell` في الـ header
+- [ ] اختبار الاتصال بـ WebSocket
+- [ ] اختبار التحديثات الحية
+- [ ] اختبار الإشعارات
+- [ ] اختبار مع عدة عملاء متصلين
 
-## Match Schedule System
-- [x] Create virtual match schedule for Libyan league
-- [x] Add match fixtures with dates and times
-- [x] Create matches page to display schedule
-- [x] Add match status filtering (scheduled, live, completed)
-- [x] Implement live match updates
+---
 
+# 🟡 المهام التكميلية (MEDIUM PRIORITY)
+## Supplementary Tasks - Should Complete
 
-## Phase 1: Change Identity and Terminology
-- [x] Change "لوحة التحكم" to "الملعب" or "نظرة عامة"
-- [x] Change "أدوات الإدارة" to "فريقي"
-- [x] Change "إجمالي النقاط" to "رصيدك"
-- [x] Change "إدارة أسعار اللاعبين" to "سوق الانتقالات"
-- [x] Update button colors to use accent color (green or gold)
-- [x] Add football field background pattern (low opacity)
-- [x] Update all UI text for game feel instead of admin feel
+### المرحلة 7: إحصائيات اللاعب المفصلة
+- [ ] إضافة جدول `player_statistics`
+- [ ] إضافة جدول `player_season_stats`
+- [ ] إنشاء migrations
+- [ ] إنشاء `players.getStatistics()` procedure
+- [ ] إنشاء `players.getSeasonStats()` procedure
+- [ ] إنشاء `players.getForm()` procedure
+- [ ] إنشاء `players.getComparison()` procedure
+- [ ] إنشاء صفحة `PlayerDetail`
+- [ ] عرض معلومات اللاعب الأساسية
+- [ ] عرض إحصائيات الموسم
+- [ ] عرض أداء الأسابيع الأخيرة
+- [ ] عرض الشكل الحالي
+- [ ] عرض المقارنة مع لاعبين آخرين
+- [ ] إنشاء مكون `PlayerStats`
+- [ ] عرض الجدول الإحصائي
+- [ ] عرض الرسوم البيانية
+- [ ] عرض التحليل
+- [ ] اختبار الإحصائيات الأسبوعية
+- [ ] اختبار إحصائيات الموسم
+- [ ] اختبار الشكل
+- [ ] اختبار المقارنة
 
+### المرحلة 8: رسوم بيانية الأداء
+- [ ] تثبيت `chart.js` و `react-chartjs-2`
+- [ ] إعداد الإعدادات الأساسية
+- [ ] اختبار الرسم البياني الأساسي
+- [ ] إنشاء مكون `PerformanceChart`
+- [ ] إنشاء مكون `WeeklyPointsChart`
+- [ ] إنشاء مكون `SeasonProgressChart`
+- [ ] إنشاء مكون `PlayerFormChart`
+- [ ] إضافة رسم بياني الأداء في Dashboard
+- [ ] إضافة رسم بياني النقاط في TeamDetails
+- [ ] إضافة رسم بياني الشكل في PlayerDetail
+- [ ] إضافة رسم بياني المقارنة في Comparison
+- [ ] اختبار الرسوم البيانية مع بيانات مختلفة
+- [ ] اختبار الاستجابة والأداء
+- [ ] اختبار على أجهزة مختلفة
 
-## Phase 2: Enhance Visual Design and Add Game Elements
-- [x] Add football pitch background image (low opacity)
-- [x] Create Pitch component with 4 rows (GK, DEF, MID, ATT)
-- [x] Design Player Token component (kit, name, points)
-- [x] Implement automatic player distribution by position
-- [x] Replace team cards with visual pitch display
-- [x] Add kit colors for each team
-- [x] Implement responsive pitch layout
+### المرحلة 9: مشاركة الفريق
+- [ ] إنشاء `generateTeamScreenshot()` function
+- [ ] إنشاء `generateShareLink()` function
+- [ ] إنشاء `generateShareText()` function
+- [ ] إضافة زر مشاركة WhatsApp
+- [ ] إضافة زر مشاركة Twitter
+- [ ] إضافة زر مشاركة Facebook
+- [ ] إضافة زر نسخ الرابط
+- [ ] إنشاء صفحة `ShareTeam`
+- [ ] عرض صورة الفريق
+- [ ] عرض خيارات المشاركة
+- [ ] عرض معاينة الرسالة
+- [ ] اختبار المشاركة على كل منصة
+- [ ] اختبار صورة الفريق
+- [ ] اختبار الروابط
 
+### المرحلة 10: دوريات متخصصة
+- [ ] إنشاء دوري الدول (ليبيا)
+- [ ] إنشاء دوري الفريق المفضل
+- [ ] إنشاء دوري الأسبوع الأول
+- [ ] إضافة الدوريات إلى Dashboard
+- [ ] اختبار الدوريات الجديدة
+- [ ] اختبار الترتيب
+- [ ] اختبار الإضافة التلقائية
 
-## Bug Fixes and Missing Features
-- [x] Fix "عرض التفاصيل" button functionality
-- [x] Fix "تعديل" button functionality
-- [x] Add "حذف" button for team deletion
-- [x] Create team details page
-- [ ] Create team edit page
-- [x] Implement team deletion with confirmation
+### المرحلة 11: تحسينات واجهة المستخدم
+- [ ] تحسين صفحة Dashboard
+- [ ] إضافة عرض الأسبوع الحالي
+- [ ] إضافة عرض الموعد النهائي للانتقالات
+- [ ] إضافة عرض الرقائق المتاحة
+- [ ] إضافة عرض الإشعارات الأخيرة
+- [ ] تحسين صفحة الانتقالات
+- [ ] إضافة عرض الميزانية المتبقية
+- [ ] إضافة عرض الانتقالات المتاحة
+- [ ] إضافة عرض الانتقالات المستخدمة
+- [ ] إضافة عرض التحذيرات
+- [ ] تحسين صفحة الترتيب
+- [ ] إضافة عرض الترتيب الأسبوعي
+- [ ] إضافة عرض الترتيب العام
+- [ ] إضافة عرض الفرق الأفضل
+- [ ] إضافة عرض الفرق الأسوأ
+- [ ] اختبار التحسينات على أجهزة مختلفة
+- [ ] اختبار الاستجابة
+- [ ] اختبار الأداء
 
+### المرحلة 12: تطبيق جوال / PWA
+- [ ] إضافة `manifest.json`
+- [ ] إضافة Service Worker
+- [ ] إضافة أيقونة التطبيق
+- [ ] اختبار التثبيت
+- [ ] تحسين الواجهة للشاشات الصغيرة
+- [ ] إضافة دعم Touch
+- [ ] إضافة إشعارات الجوال
+- [ ] تحسين الأداء
+- [ ] اختبار على أجهزة مختلفة
+- [ ] اختبار الأداء
+- [ ] اختبار البطارية والبيانات
 
-## Seed Libyan Football Players Data
-- [x] Parse Excel file with all Libyan teams and players
-- [x] Calculate appropriate prices based on player position and experience
-- [x] Insert all teams and players into database
-- [ ] Test player selection in create team page
+---
 
+# 🔧 التعديلات والإصلاح (CRITICAL & HIGH PRIORITY)
+## Bug Fixes & Code Review
 
-## Database Cleanup & Player Display
-- [x] Remove duplicate teams from database
-- [x] Fix player display in dashboard/team creation
-- [x] Verify all 150 players are showing correctly
-- [x] Test team creation with real player data
+### المرحلة 13: مراجعة الكود والإصلاحات
+- [ ] مراجعة `server/routers.ts` للأخطاء المنطقية
+- [ ] مراجعة `client/src/pages/` للأخطاء في الواجهة
+- [ ] مراجعة `drizzle/schema.ts` للمشاكل في التصميم
+- [ ] مراجعة `server/db.ts` للاستعلامات غير الفعالة
+- [ ] اختبار إنشاء فريق (11 لاعب - الحد الأدنى)
+- [ ] اختبار إنشاء فريق (15 لاعب - الحد الأقصى)
+- [ ] اختبار إنشاء فريق (أقل من 11 - يجب أن يفشل)
+- [ ] اختبار إنشاء فريق (أكثر من 15 - يجب أن يفشل)
+- [ ] اختبار الميزانية (100M)
+- [ ] اختبار شراء لاعب
+- [ ] اختبار بيع لاعب
+- [ ] اختبار الميزانية المتبقية
+- [ ] اختبار عدم تجاوز الميزانية
+- [ ] اختبار إنشاء دوري
+- [ ] اختبار الانضمام إلى دوري
+- [ ] اختبار الترتيب
+- [ ] اختبار حساب النقاط
+- [ ] اختبار الترتيب العام
+- [ ] اختبار الترتيب الأسبوعي
+- [ ] توثيق جميع الأخطاء المكتشفة
+- [ ] إنشاء issue لكل خطأ
+- [ ] إصلاح الأخطاء بالأولوية
+- [ ] إعادة الاختبار بعد الإصلاح
+- [ ] تحسين استعلامات قاعدة البيانات
+- [ ] إضافة caching حيث يلزم
+- [ ] تحسين حجم الحزمة (Bundle Size)
+- [ ] اختبار الأداء
+- [ ] مراجعة التحقق من الصلاحيات
+- [ ] مراجعة التحقق من المدخلات
+- [ ] مراجعة معالجة الأخطاء
+- [ ] إضافة Rate Limiting حيث يلزم
 
+### المرحلة 14: إصلاح الأخطاء المعروفة
+- [ ] التحقق من عدم وجود أخطاء 404 على الصفحات
+- [ ] التحقق من عدم وجود أخطاء في وحدة التحكم
+- [ ] التحقق من التوافق مع المتصفحات المختلفة
+- [ ] التحقق من الاستجابة على أحجام شاشة مختلفة
+- [ ] التحقق من عدم وجود بيانات مكررة في قاعدة البيانات
+- [ ] التحقق من تكامل البيانات (Data Integrity)
+- [ ] التحقق من عدم وجود بيانات مفقودة
+- [ ] التحقق من صحة البيانات
+- [ ] تحسين سرعة تحميل الصفحات
+- [ ] تحسين سرعة الاستعلامات
+- [ ] تقليل استهلاك الذاكرة
+- [ ] تحسين استهلاك البطارية (للجوال)
+- [ ] التحقق من التوافق مع الإصدارات القديمة من المتصفحات
+- [ ] التحقق من التوافق مع الأجهزة المختلفة
+- [ ] التحقق من التوافق مع الأنظمة المختلفة
 
-## API Data Fetching Fixes
-- [x] Fix teams.list procedure to fetch from database
-- [x] Fix players.list and players.getAll procedures to fetch from database
-- [x] Fix leagues.list procedure to fetch from database
-- [x] Verify all data displays correctly in UI
-- [x] Test team creation with real database data
+### المرحلة 15: إضافة الاختبارات الشاملة
+- [ ] اختبار `calculatePlayerPoints()` - الأهداف
+- [ ] اختبار `calculatePlayerPoints()` - التمريرات الحاسمة
+- [ ] اختبار `calculatePlayerPoints()` - الأوراق النظيفة
+- [ ] اختبار `calculatePlayerPoints()` - البطاقات
+- [ ] اختبار `calculatePlayerPoints()` - الحالات الحدية
+- [ ] اختبار `calculateTeamPoints()` - مع 11 لاعب
+- [ ] اختبار `calculateTeamPoints()` - مع 15 لاعب
+- [ ] اختبار `calculateTeamPoints()` - مع الكابتن
+- [ ] اختبار `calculateTeamPoints()` - مع الرقائق
+- [ ] اختبار `validateTransfer()` - الميزانية
+- [ ] اختبار `validateTransfer()` - الحد الأقصى للاعبين
+- [ ] اختبار `validateTransfer()` - الحد الأدنى للاعبين
+- [ ] اختبار `checkTransferDeadline()` - قبل الموعد النهائي
+- [ ] اختبار `checkTransferDeadline()` - بعد الموعد النهائي
+- [ ] اختبار `checkTransferDeadline()` - في الموعد النهائي
+- [ ] اختبار إنشاء فريق كامل
+- [ ] اختبار تحديث الفريق
+- [ ] اختبار حساب النقاط الكامل
+- [ ] اختبار الترتيب الكامل
+- [ ] اختبار تسجيل الدخول
+- [ ] اختبار إنشاء فريق
+- [ ] اختبار الانتقالات
+- [ ] اختبار الدوريات
+- [ ] قياس التغطية الحالية
+- [ ] إضافة اختبارات للأجزاء غير المغطاة
+- [ ] الهدف: 80%+ تغطية
+
+### المرحلة 16: التوثيق الشامل
+- [ ] توثيق جميع الـ procedures
+- [ ] توثيق المدخلات والمخرجات
+- [ ] توثيق الأخطاء المحتملة
+- [ ] إضافة أمثلة للـ API
+- [ ] توثيق جميع الصفحات
+- [ ] توثيق جميع المكونات
+- [ ] توثيق الخصائص (Props)
+- [ ] إضافة لقطات شاشة
+- [ ] توثيق جميع الجداول
+- [ ] توثيق جميع الحقول
+- [ ] توثيق العلاقات
+- [ ] إضافة رسوم بيانية
+- [ ] كيفية إنشاء فريق
+- [ ] كيفية الانتقالات
+- [ ] كيفية الانضمام إلى دوري
+- [ ] كيفية استخدام الرقائق
+
+---
+
+# 📊 إحصائيات المشروع
+## Project Statistics
+
+| الفئة | العدد | النسبة |
+|-------|-------|--------|
+| المهام الأساسية | 16 | 44% |
+| المهام التكميلية | 12 | 33% |
+| مهام الإصلاح | 8 | 23% |
+| **إجمالي المهام** | **36** | **100%** |
+
+| المرحلة | المهام | المدة |
+|--------|--------|-------|
+| المرحلة 1-6 | 6 | 6 أسابيع |
+| المرحلة 7-12 | 6 | 4 أسابيع |
+| المرحلة 13-16 | 4 | 4 أسابيع |
+| **الإجمالي** | **16** | **14 أسبوع** |
+
+---
+
+# ✅ معايير القبول
+## Acceptance Criteria
+
+**للمهام الأساسية:**
+- جميع الوظائف تعمل كما هو متوقع
+- لا توجد أخطاء في وحدة التحكم
+- الأداء مقبول (< 2 ثانية تحميل)
+- توافق مع المتصفحات الرئيسية
+- توافق مع الأجهزة المختلفة
+- اختبارات الوحدة تمر بنسبة 100%
+- توثيق كامل
+
+**للمهام التكميلية:**
+- جميع الوظائف تعمل كما هو متوقع
+- لا توجد أخطاء في وحدة التحكم
+- الأداء مقبول
+- توافق مع المتصفحات الرئيسية
+- توثيق كامل
+
+**للتعديلات والإصلاح:**
+- جميع الأخطاء المعروفة تم إصلاحها
+- لا توجد أخطاء جديدة
+- الأداء محسّن
+- الأمان محسّن
+- تغطية الاختبارات 80%+
+
+---
+
+**آخر تحديث:** May 21, 2026  
+**الحالة:** جاهز للتنفيذ  
+**المسؤول:** Manus AI Team

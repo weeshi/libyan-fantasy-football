@@ -66,6 +66,7 @@ export const leagues = mysqlTable("leagues", {
   name: varchar("name", { length: 255 }).notNull(),
   creatorId: int("creatorId").notNull(),
   description: text("description"),
+  leagueType: mysqlEnum("leagueType", ["classic", "head_to_head", "cup"]).default("classic").notNull(),
   maxParticipants: int("maxParticipants").default(20).notNull(),
   status: mysqlEnum("status", ["draft", "active", "completed"]).default("draft").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -91,6 +92,7 @@ export const userTeams = mysqlTable("userTeams", {
   wins: int("wins").default(0).notNull(),
   draws: int("draws").default(0).notNull(),
   losses: int("losses").default(0).notNull(),
+  activeChip: varchar("activeChip", { length: 50 }), // captain, triple_captain, wildcard, etc
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -163,6 +165,8 @@ export const gameweeks = mysqlTable("gameweeks", {
   gameweekNumber: int("gameweekNumber").notNull(),
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate").notNull(),
+  transferDeadline: timestamp("transferDeadline"),
+  isTransferWindowOpen: int("isTransferWindowOpen").default(1).notNull(), // 0 = false, 1 = true
   status: mysqlEnum("status", ["upcoming", "active", "completed"]).default("upcoming").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -204,3 +208,61 @@ export const transactions = mysqlTable("transactions", {
 
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = typeof transactions.$inferInsert;
+
+/**
+ * Scoring rules for the fantasy football game
+ */
+export const scoringRules = mysqlTable("scoringRules", {
+  id: int("id").autoincrement().primaryKey(),
+  ruleType: varchar("ruleType", { length: 100 }).notNull(), // e.g., "minutesPlayed", "goal", "assist", etc
+  position: mysqlEnum("position", ["goalkeeper", "defender", "midfielder", "forward", "all"]).default("all").notNull(),
+  points: int("points").notNull(),
+  description: text("description"),
+  isActive: int("isActive").default(1).notNull(), // 0 = false, 1 = true
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ScoringRule = typeof scoringRules.$inferSelect;
+export type InsertScoringRule = typeof scoringRules.$inferInsert;
+
+/**
+ * Player performance statistics per gameweek
+ */
+export const playerGameweekStats = mysqlTable("playerGameweekStats", {
+  id: int("id").autoincrement().primaryKey(),
+  playerId: int("playerId").notNull(),
+  gameweekId: int("gameweekId").notNull(),
+  matchId: int("matchId"),
+  minutesPlayed: int("minutesPlayed").default(0).notNull(),
+  goals: int("goals").default(0).notNull(),
+  assists: int("assists").default(0).notNull(),
+  cleanSheet: int("cleanSheet").default(0).notNull(), // 0 or 1
+  yellowCards: int("yellowCards").default(0).notNull(),
+  redCards: int("redCards").default(0).notNull(),
+  goalsAgainst: int("goalsAgainst").default(0).notNull(),
+  saves: int("saves").default(0).notNull(), // for goalkeepers
+  bonusPoints: int("bonusPoints").default(0).notNull(), // BPS points
+  totalPoints: int("totalPoints").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PlayerGameweekStat = typeof playerGameweekStats.$inferSelect;
+export type InsertPlayerGameweekStat = typeof playerGameweekStats.$inferInsert;
+
+/**
+ * User team chips (special powers)
+ */
+export const userChips = mysqlTable("userChips", {
+  id: int("id").autoincrement().primaryKey(),
+  userTeamId: int("userTeamId").notNull(),
+  chipType: mysqlEnum("chipType", ["captain", "triple_captain", "wildcard", "bench_boost", "free_hit"]).notNull(),
+  isUsed: int("isUsed").default(0).notNull(), // 0 = false, 1 = true
+  usedInGameweek: int("usedInGameweek"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserChip = typeof userChips.$inferSelect;
+export type InsertUserChip = typeof userChips.$inferInsert;
