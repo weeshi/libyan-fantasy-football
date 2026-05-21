@@ -1,3 +1,4 @@
+import { adminRouter } from './routers/admin';
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -276,6 +277,8 @@ export const appRouter = router({
     }),
   }),
 
+  admin: adminRouter,
+
   matches: router({
     all: publicProcedure.query(async () => {
       try {
@@ -323,3 +326,5 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+// Note: Admin router will be integrated here
