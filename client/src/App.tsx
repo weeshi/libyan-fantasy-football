@@ -16,6 +16,7 @@ import PlayerTrading from "./pages/PlayerTrading";
 import Leaderboard from "./pages/Leaderboard";
 import Matches from "./pages/Matches";
 import Transfers from "./pages/Transfers";
+import Chips from "./pages/Chips";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -33,6 +34,7 @@ function Router() {
       <Route path={"/leaderboard"} component={Leaderboard} />
       <Route path={"/matches"} component={Matches} />
       <Route path={"/transfers"} component={Transfers} />
+      <Route path={"/chips"} component={Chips} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
