@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import GameweekManagement from "@/components/admin/GameweekManagement";
 import MatchManagement from "@/components/admin/MatchManagement";
 import ResultManagement from "@/components/admin/ResultManagement";
+import ScoringRulesManagement from "@/components/admin/ScoringRulesManagement";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("gameweeks");
@@ -35,7 +36,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="gameweeks" className="text-base">
               إدارة الأسابيع
             </TabsTrigger>
@@ -44,6 +45,9 @@ export default function AdminDashboard() {
             </TabsTrigger>
             <TabsTrigger value="results" className="text-base">
               إدارة النتائج
+            </TabsTrigger>
+            <TabsTrigger value="scoring" className="text-base">
+              قواعس النقاط
             </TabsTrigger>
           </TabsList>
 
@@ -60,6 +64,11 @@ export default function AdminDashboard() {
           {/* Result Management Tab */}
           <TabsContent value="results">
             <ResultManagement />
+          </TabsContent>
+
+          {/* Scoring Rules Tab */}
+          <TabsContent value="scoring">
+            <ScoringRulesManagement />
           </TabsContent>
         </Tabs>
 
