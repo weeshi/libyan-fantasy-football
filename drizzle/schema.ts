@@ -266,3 +266,82 @@ export const userChips = mysqlTable("userChips", {
 
 export type UserChip = typeof userChips.$inferSelect;
 export type InsertUserChip = typeof userChips.$inferInsert;
+
+/**
+ * Cup tournaments
+ */
+export const cupTournaments = mysqlTable("cupTournaments", {
+  id: int("id").autoincrement().primaryKey(),
+  leagueId: int("leagueId"),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  cupType: mysqlEnum("cupType", ["single_elimination", "double_elimination"]).default("single_elimination").notNull(),
+  status: mysqlEnum("status", ["draw", "in_progress", "completed", "cancelled"]).default("draw").notNull(),
+  startGameweek: int("startGameweek"),
+  totalTeams: int("totalTeams").notNull(),
+  currentRound: int("currentRound").default(1).notNull(),
+  totalRounds: int("totalRounds").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CupTournament = typeof cupTournaments.$inferSelect;
+export type InsertCupTournament = typeof cupTournaments.$inferInsert;
+
+/**
+ * Cup rounds
+ */
+export const cupRounds = mysqlTable("cupRounds", {
+  id: int("id").autoincrement().primaryKey(),
+  cupId: int("cupId").notNull(),
+  roundNumber: int("roundNumber").notNull(),
+  gameweekId: int("gameweekId"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CupRound = typeof cupRounds.$inferSelect;
+export type InsertCupRound = typeof cupRounds.$inferInsert;
+
+/**
+ * Cup matches
+ */
+export const cupMatches = mysqlTable("cupMatches", {
+  id: int("id").autoincrement().primaryKey(),
+  cupId: int("cupId").notNull(),
+  roundId: int("roundId"),
+  round: int("round").notNull(),
+  team1Id: int("team1Id").notNull(),
+  team2Id: int("team2Id").notNull(),
+  team1Points: int("team1Points").default(0).notNull(),
+  team2Points: int("team2Points").default(0).notNull(),
+  winner: int("winner"),
+  status: mysqlEnum("status", ["pending", "completed", "walkover"]).default("pending").notNull(),
+  matchDate: timestamp("matchDate"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CupMatch = typeof cupMatches.$inferSelect;
+export type InsertCupMatch = typeof cupMatches.$inferInsert;
+
+/**
+ * Cup standings
+ */
+export const cupStandings = mysqlTable("cupStandings", {
+  id: int("id").autoincrement().primaryKey(),
+  cupId: int("cupId").notNull(),
+  teamId: int("teamId").notNull(),
+  position: int("position").notNull(),
+  wins: int("wins").default(0).notNull(),
+  losses: int("losses").default(0).notNull(),
+  pointsFor: int("pointsFor").default(0).notNull(),
+  pointsAgainst: int("pointsAgainst").default(0).notNull(),
+  status: mysqlEnum("status", ["active", "eliminated", "champion"]).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CupStanding = typeof cupStandings.$inferSelect;
+export type InsertCupStanding = typeof cupStandings.$inferInsert;

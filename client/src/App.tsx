@@ -6,7 +6,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import TeamDetails from "./pages/TeamDetails";
-import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboardEnhanced from "./pages/AdminDashboardEnhanced";
 import PlayersManagement from "./pages/PlayersManagement";
 import LeaguesManagement from "./pages/LeaguesManagement";
 import ScoringSystem from "./pages/ScoringSystem";
@@ -25,7 +26,8 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
-      <Route path={"/dashboard"} component={Dashboard} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin-enhanced" component={AdminDashboardEnhanced} />
       <Route path={"/players"} component={PlayersManagement} />
       <Route path={"/leagues"} component={LeaguesManagement} />
       <Route path={"/scoring"} component={ScoringSystem} />

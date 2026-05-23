@@ -9,10 +9,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Plus, Edit2, Trash2, Check } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import GameweekManagement from "@/components/admin/GameweekManagement";
-import MatchManagement from "@/components/admin/MatchManagement";
-import ResultManagement from "@/components/admin/ResultManagement";
-import ScoringRulesManagement from "@/components/admin/ScoringRulesManagement";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("gameweeks");

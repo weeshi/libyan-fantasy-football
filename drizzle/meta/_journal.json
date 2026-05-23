@@ -36,6 +36,13 @@
       "when": 1779398432682,
       "tag": "0004_perpetual_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1779560514714,
+      "tag": "0005_fine_next_avengers",
+      "breakpoints": true
     }
   ]
 }
