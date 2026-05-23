@@ -7,12 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import TeamDetails from "./pages/TeamDetails";
 import AdminDashboard from "./pages/AdminDashboard";
-import AdminDashboardEnhanced from "./pages/AdminDashboardEnhanced";
-import PlayersManagement from "./pages/PlayersManagement";
-import LeaguesManagement from "./pages/LeaguesManagement";
-import ScoringSystem from "./pages/ScoringSystem";
 import CreateTeam from "./pages/CreateTeam";
-import AdminPlayerPrices from "./pages/AdminPlayerPrices";
 import PlayerTrading from "./pages/PlayerTrading";
 import Leaderboard from "./pages/Leaderboard";
 import Matches from "./pages/Matches";
@@ -27,13 +22,8 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin-enhanced" component={AdminDashboardEnhanced} />
-      <Route path={"/players"} component={PlayersManagement} />
-      <Route path={"/leagues"} component={LeaguesManagement} />
-      <Route path={"/scoring"} component={ScoringSystem} />
       <Route path={"/create-team"} component={CreateTeam} />
       <Route path={"/team/:id"} component={TeamDetails} />
-      <Route path={"/admin/player-prices"} component={AdminPlayerPrices} />
       <Route path={"/player-trading"} component={PlayerTrading} />
       <Route path={"/leaderboard"} component={Leaderboard} />
       <Route path={"/matches"} component={Matches} />
