@@ -22,12 +22,13 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path="/admin" component={AdminDashboard} />
-      <Route path={"/create-team"} component={CreateTeam} />
-      <Route path={"/team/:id"} component={TeamDetails} />
-      <Route path={"/player-trading"} component={PlayerTrading} />
-      <Route path={"/leaderboard"} component={Leaderboard} />
-      <Route path={"/matches"} component={Matches} />
-      <Route path={"/transfers"} component={Transfers} />
+      <Route path="/dashboard" component={Home} />
+      <Route path="/create-team" component={CreateTeam} />
+      <Route path="/team/:id" component={TeamDetails} />
+      <Route path="/player-trading" component={PlayerTrading} />
+      <Route path="/leaderboard" component={Leaderboard} />
+      <Route path="/matches" component={Matches} />
+      <Route path="/transfers" component={Transfers} />
       <Route path="/chips" component={Chips} />
       <Route path="/h2h" component={H2HLeague} />
       <Route path="/cup" component={CupTournament} />
