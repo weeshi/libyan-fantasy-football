@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link, useLocation, useRoute } from "wouter";
 import { ArrowRight, Trash2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
 import Pitch from "@/components/Pitch";
 
 export default function TeamDetails() {

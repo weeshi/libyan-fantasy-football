@@ -6,7 +6,6 @@ import { Link, useLocation } from "wouter";
 import { ShoppingCart, History } from "lucide-react";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
 
 export default function PlayerTrading() {
   const { user, isAuthenticated } = useAuth();
