@@ -105,15 +105,16 @@ export async function sendNotification(
       VALUES (
         ${userId},
         '${type}',
-        '${title.replace(/'/g, "\\'")}',
-        '${message.replace(/'/g, "\\'")}',
+        '${title.replace(/'/g, "\\'")}'',
+        '${message.replace(/'/g, "\\'")}'',
         '${priority}',
-        '${JSON.stringify(data).replace(/'/g, "\\'")}',
+        '${JSON.stringify(data).replace(/'/g, "\\'")}'',
         ${expiresAt ? `'${expiresAt.toISOString()}'` : "NULL"}
       )
     `);
 
-    return { success: true, notificationId: result.insertId };
+    const insertResult = result as any;
+    return { success: true, notificationId: insertResult.insertId || 0 };
   } catch (error) {
     console.error("Failed to send notification:", error);
     return { success: false };
@@ -239,7 +240,8 @@ export async function getUnreadNotificationCount(userId: number): Promise<number
       WHERE userId = ${userId} AND isRead = 0
     `);
 
-    return result[0]?.count || 0;
+    const countResult = (result as any[])[0];
+    return countResult?.count || 0;
   } catch (error) {
     console.error("Failed to get unread notification count:", error);
     return 0;
@@ -389,7 +391,8 @@ export async function cleanupExpiredNotifications(): Promise<number> {
       WHERE expiresAt IS NOT NULL AND expiresAt < NOW()
     `);
 
-    return result.affectedRows || 0;
+    const deleteResult = result as any;
+    return deleteResult.affectedRows || 0;
   } catch (error) {
     console.error("Failed to cleanup expired notifications:", error);
     return 0;
