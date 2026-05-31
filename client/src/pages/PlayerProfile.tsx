@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRoute } from 'wouter';
+import { useRoute, useNavigate } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ interface PlayerStats {
 
 export default function PlayerProfile() {
   const [match, params] = useRoute('/player/:id');
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [player, setPlayer] = useState<PlayerStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -113,11 +114,11 @@ export default function PlayerProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8">
+      <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <Button variant="ghost" onClick={() => window.history.back()} className="mb-4">
+          <Button variant="ghost" onClick={() => navigate('/')} className="mb-4">
             ← العودة
           </Button>
         </div>
@@ -262,7 +263,7 @@ export default function PlayerProfile() {
         {/* Action Buttons */}
         <div className="mt-8 flex gap-4">
           <Button className="flex-1">أضف إلى فريقي</Button>
-          <Button variant="outline" className="flex-1">قارن مع لاعب آخر</Button>
+          <Button variant="outline" className="flex-1" onClick={() => navigate(`/player-comparison?player=${player?.playerId}`)}>قارن مع لاعب آخر</Button>
         </div>
       </div>
     </div>

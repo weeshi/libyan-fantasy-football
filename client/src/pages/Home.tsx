@@ -46,6 +46,9 @@ export default function Home() {
                   <Link href="/cup">
                     <span className="text-slate-300 hover:text-white cursor-pointer transition">الكأس</span>
                   </Link>
+                  <Link href="/player-comparison">
+                    <span className="text-slate-300 hover:text-white cursor-pointer transition">مقارنة اللاعبين</span>
+                  </Link>
                   <Link href="/admin">
                     <span className="text-slate-300 hover:text-white cursor-pointer transition">الإدارة</span>
                   </Link>
@@ -91,6 +94,9 @@ export default function Home() {
               </Link>
               <Link href="/cup">
                 <Button variant="ghost" size="sm" className="text-xs">الكأس</Button>
+              </Link>
+              <Link href="/player-comparison">
+                <Button variant="ghost" size="sm" className="text-xs">مقارنة</Button>
               </Link>
               <Link href="/admin">
                 <Button variant="ghost" size="sm" className="text-xs">الإدارة</Button>
