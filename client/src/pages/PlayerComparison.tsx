@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -51,7 +51,7 @@ const POSITIONS = [
 
 export default function PlayerComparison() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
   const [selectedTeam, setSelectedTeam] = useState<string>('');
@@ -161,7 +161,7 @@ export default function PlayerComparison() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <Button variant="ghost" onClick={() => navigate('/')} className="mb-4">
+          <Button variant="ghost" onClick={() => setLocation('/')} className="mb-4">
             ← العودة
           </Button>
           <h1 className="text-4xl font-bold mb-2">مقارنة اللاعبين</h1>
@@ -451,7 +451,7 @@ export default function PlayerComparison() {
                         <p className="text-2xl font-bold">{player.totalPoints}</p>
                       </div>
                     </div>
-                    <Button className="w-full" onClick={() => navigate(`/player/${player.id}`)}>
+                    <Button className="w-full" onClick={() => setLocation(`/player/${player.id}`)}>
                       عرض الملف الشخصي
                     </Button>
                   </CardContent>
