@@ -15,6 +15,7 @@ import Transfers from "./pages/Transfers";
 import Chips from "./pages/Chips";
 import H2HLeague from "./pages/H2HLeague";
 import CupTournament from "./pages/CupTournament";
+import PlayerProfile from "./pages/PlayerProfile";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/chips" component={Chips} />
       <Route path="/h2h" component={H2HLeague} />
       <Route path="/cup" component={CupTournament} />
+      <Route path="/player/:id" component={PlayerProfile} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
