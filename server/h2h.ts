@@ -166,10 +166,12 @@ export async function updateH2HMatchResult(
     `);
 
     // Update standings
-    const match = await db.execute(`SELECT * FROM h2h_matches WHERE id = ${matchId}`);
-    if (match.length > 0) {
-      const m = match[0];
-      await updateH2HStandings(m.leagueId, m.team1Id, m.team2Id, team1Points, team2Points, winner);
+    const matchResult = await db.execute(`SELECT * FROM h2h_matches WHERE id = ${matchId}`);
+    if (Array.isArray(matchResult) && matchResult.length > 0 && typeof matchResult[0] === 'object') {
+      const m = matchResult[0] as any;
+      if (m.leagueId && m.team1Id && m.team2Id) {
+        await updateH2HStandings(m.leagueId, m.team1Id, m.team2Id, team1Points, team2Points, winner);
+      }
     }
 
     return { success: true, message: "تم تحديث نتيجة المباراة" };
@@ -253,7 +255,7 @@ export async function getH2HStandings(leagueId: number): Promise<H2HStanding[]> 
   if (!db) return [];
 
   try {
-    const standings = await db.execute(`
+    const result = await db.execute(`
       SELECT 
         s.userTeamId,
         ut.teamName,
@@ -270,16 +272,20 @@ export async function getH2HStandings(leagueId: number): Promise<H2HStanding[]> 
       ORDER BY totalPoints DESC, pointDifference DESC
     `);
 
-    return standings.map((s, index) => ({
-      userTeamId: s.userTeamId,
-      teamName: s.teamName,
-      wins: s.wins,
-      draws: s.draws,
-      losses: s.losses,
-      pointsFor: s.pointsFor,
-      pointsAgainst: s.pointsAgainst,
-      pointDifference: s.pointDifference,
-      totalPoints: s.totalPoints,
+    const standings = Array.isArray(result) && result.length > 0 && typeof result[0] === 'object' && 'userTeamId' in result[0] 
+      ? result as any[]
+      : [];
+
+    return standings.map((s: any, index: number) => ({
+      userTeamId: s.userTeamId || 0,
+      teamName: s.teamName || '',
+      wins: s.wins || 0,
+      draws: s.draws || 0,
+      losses: s.losses || 0,
+      pointsFor: s.pointsFor || 0,
+      pointsAgainst: s.pointsAgainst || 0,
+      pointDifference: (s.pointDifference || 0) as number,
+      totalPoints: (s.totalPoints || 0) as number,
       rank: index + 1,
     }));
   } catch (error) {
@@ -291,12 +297,12 @@ export async function getH2HStandings(leagueId: number): Promise<H2HStanding[]> 
 /**
  * Get H2H matches for a gameweek
  */
-export async function getH2HMatches(leagueId: number, gameweekId: number) {
+export async function getH2HMatches(leagueId: number, gameweekId: number): Promise<any[]> {
   const db = await getDb();
   if (!db) return [];
 
   try {
-    const matches = await db.execute(`
+    const result = await db.execute(`
       SELECT 
         m.id,
         m.team1Id,
@@ -315,7 +321,9 @@ export async function getH2HMatches(leagueId: number, gameweekId: number) {
       ORDER BY m.status DESC, m.id
     `);
 
-    return matches;
+    return Array.isArray(result) && result.length > 0 && typeof result[0] === 'object' && 'id' in result[0]
+      ? result as any[]
+      : [];
   } catch (error) {
     console.error("Failed to get H2H matches:", error);
     return [];
