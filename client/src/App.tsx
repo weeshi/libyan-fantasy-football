@@ -17,6 +17,7 @@ import H2HLeague from "./pages/H2HLeague";
 import CupTournament from "./pages/CupTournament";
 import PlayerProfile from "./pages/PlayerProfile";
 import PlayerComparison from "./pages/PlayerComparison";
+import FAQ from "./pages/FAQ";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/cup" component={CupTournament} />
       <Route path="/player/:id" component={PlayerProfile} />
       <Route path="/player-comparison" component={PlayerComparison} />
+      <Route path="/faq" component={FAQ} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

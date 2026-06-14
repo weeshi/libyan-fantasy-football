@@ -49,6 +49,9 @@ export default function Home() {
                   <Link href="/player-comparison">
                     <span className="text-slate-300 hover:text-white cursor-pointer transition">مقارنة اللاعبين</span>
                   </Link>
+                  <Link href="/faq">
+                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الأسئلة الشائعة</span>
+                  </Link>
                   <Link href="/admin">
                     <span className="text-slate-300 hover:text-white cursor-pointer transition">الإدارة</span>
                   </Link>
@@ -97,6 +100,9 @@ export default function Home() {
               </Link>
               <Link href="/player-comparison">
                 <Button variant="ghost" size="sm" className="text-xs">مقارنة</Button>
+              </Link>
+              <Link href="/faq">
+                <Button variant="ghost" size="sm" className="text-xs">الأسئلة</Button>
               </Link>
               <Link href="/admin">
                 <Button variant="ghost" size="sm" className="text-xs">الإدارة</Button>
