@@ -27,17 +27,23 @@ export function useAuth(options?: UseAuthOptions) {
   const logout = useCallback(async () => {
     try {
       await logoutMutation.mutateAsync();
+      console.log('[Auth] Logout successful');
     } catch (error: unknown) {
+      console.error('[Auth] Logout error:', error);
       if (
         error instanceof TRPCClientError &&
         error.data?.code === "UNAUTHORIZED"
       ) {
+        console.warn('[Auth] Already unauthorized, clearing local state');
         return;
       }
-      throw error;
+      // Still clear local state even if logout API call fails
+      console.warn('[Auth] Logout API failed, clearing local state anyway');
     } finally {
+      // Always clear the user data from cache
       utils.auth.me.setData(undefined, null);
       await utils.auth.me.invalidate();
+      console.log('[Auth] Local auth state cleared');
     }
   }, [logoutMutation, utils]);
 
@@ -67,7 +73,8 @@ export function useAuth(options?: UseAuthOptions) {
     if (typeof window === "undefined") return;
     if (window.location.pathname === redirectPath) return;
 
-    window.location.href = redirectPath
+    console.log('[Auth] Redirecting to login:', redirectPath);
+    window.location.href = redirectPath;
   }, [
     redirectOnUnauthenticated,
     redirectPath,
