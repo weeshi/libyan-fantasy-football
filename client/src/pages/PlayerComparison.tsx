@@ -76,8 +76,8 @@ export default function PlayerComparison() {
   const filteredPlayers = useMemo(() => {
     return allPlayers.filter((player: any) => {
       const matchesSearch = player.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesPosition = !selectedPosition || player.position === selectedPosition;
-      const matchesTeam = !selectedTeam || player.teamId.toString() === selectedTeam;
+      const matchesPosition = selectedPosition === 'all' || !selectedPosition || player.position === selectedPosition;
+      const matchesTeam = selectedTeam === 'all' || !selectedTeam || player.teamId.toString() === selectedTeam;
       const notSelected = !selectedPlayers.some(p => p.id === player.id);
       return matchesSearch && matchesPosition && matchesTeam && notSelected;
     });
@@ -188,7 +188,7 @@ export default function PlayerComparison() {
                   <SelectValue placeholder="اختر المركز" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">جميع المراكز</SelectItem>
+                  <SelectItem value="all">جميع المراكز</SelectItem>
                   {POSITIONS.map(pos => (
                     <SelectItem key={pos.value} value={pos.value}>
                       {pos.label}
@@ -201,7 +201,7 @@ export default function PlayerComparison() {
                   <SelectValue placeholder="اختر الفريق" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">جميع الفرق</SelectItem>
+                  <SelectItem value="all">جميع الفرق</SelectItem>
                   {teams.map((team: any) => (
                     <SelectItem key={team.id} value={team.id.toString()}>
                       {team.name}
