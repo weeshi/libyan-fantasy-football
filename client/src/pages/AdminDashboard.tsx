@@ -16,7 +16,9 @@ import { trpc } from '@/lib/trpc';
 import { useAuth } from '@/_core/hooks/useAuth';
 import { useLocation } from 'wouter';
 import { useToast } from '@/contexts/ToastContext';
+import { usePagination } from '@/hooks/usePagination';
 import { SearchFilterBar } from '@/components/admin/SearchFilterBar';
+import { Pagination } from '@/components/admin/Pagination';
 import {
   UserModal, TeamModal, PlayerModal, LeagueModal,
   DeleteConfirmDialog, ManageTeamPlayersModal
@@ -107,6 +109,12 @@ export default function AdminDashboard() {
   const [selectedLeague, setSelectedLeague] = useState<any>(null);
   const [deleteLeagueOpen, setDeleteLeagueOpen] = useState(false);
   const [leagues, setLeagues] = useState(mockStats.leagues);
+
+  // ============= Pagination Hooks =============
+  const userPagination = usePagination({ items: users, initialItemsPerPage: 10 });
+  const teamPagination = usePagination({ items: teams, initialItemsPerPage: 10 });
+  const playerPagination = usePagination({ items: players, initialItemsPerPage: 10 });
+  const leaguePagination = usePagination({ items: leagues, initialItemsPerPage: 10 });
 
   // Check if user is admin
   if (user?.role !== 'admin') {
@@ -457,7 +465,7 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.map((u) => (
+                      {userPagination.paginatedItems.map((u) => (
                         <tr key={u.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4 font-medium">{u.name}</td>
                           <td className="py-3 px-4">{u.email}</td>
@@ -502,6 +510,14 @@ export default function AdminDashboard() {
                     </tbody>
                   </table>
                 </div>
+                <Pagination
+                  currentPage={userPagination.currentPage}
+                  totalPages={userPagination.totalPages}
+                  totalItems={filteredUsers.length}
+                  itemsPerPage={userPagination.itemsPerPage}
+                  onPageChange={userPagination.handlePageChange}
+                  onItemsPerPageChange={userPagination.handleItemsPerPageChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -546,7 +562,7 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredTeams.map((t) => (
+                      {teamPagination.paginatedItems.map((t) => (
                         <tr key={t.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4 font-medium">{t.name}</td>
                           <td className="py-3 px-4">{t.owner}</td>
@@ -605,6 +621,14 @@ export default function AdminDashboard() {
                     </tbody>
                   </table>
                 </div>
+                <Pagination
+                  currentPage={teamPagination.currentPage}
+                  totalPages={teamPagination.totalPages}
+                  totalItems={filteredTeams.length}
+                  itemsPerPage={teamPagination.itemsPerPage}
+                  onPageChange={teamPagination.handlePageChange}
+                  onItemsPerPageChange={teamPagination.handleItemsPerPageChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -650,7 +674,7 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredPlayers.map((p) => (
+                      {playerPagination.paginatedItems.map((p) => (
                         <tr key={p.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4 font-medium">{p.name}</td>
                           <td className="py-3 px-4">{p.position}</td>
@@ -689,6 +713,14 @@ export default function AdminDashboard() {
                     </tbody>
                   </table>
                 </div>
+                <Pagination
+                  currentPage={playerPagination.currentPage}
+                  totalPages={playerPagination.totalPages}
+                  totalItems={filteredPlayers.length}
+                  itemsPerPage={playerPagination.itemsPerPage}
+                  onPageChange={playerPagination.handlePageChange}
+                  onItemsPerPageChange={playerPagination.handleItemsPerPageChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -732,7 +764,7 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredLeagues.map((l) => (
+                      {leaguePagination.paginatedItems.map((l) => (
                         <tr key={l.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4 font-medium">{l.name}</td>
                           <td className="py-3 px-4">
@@ -774,6 +806,14 @@ export default function AdminDashboard() {
                     </tbody>
                   </table>
                 </div>
+                <Pagination
+                  currentPage={leaguePagination.currentPage}
+                  totalPages={leaguePagination.totalPages}
+                  totalItems={filteredLeagues.length}
+                  itemsPerPage={leaguePagination.itemsPerPage}
+                  onPageChange={leaguePagination.handlePageChange}
+                  onItemsPerPageChange={leaguePagination.handleItemsPerPageChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
