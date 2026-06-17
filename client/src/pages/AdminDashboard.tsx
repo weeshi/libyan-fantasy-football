@@ -48,6 +48,13 @@ const mockStats = {
     { id: 2, name: 'علي حسن', position: 'وسط', team: 'الترجي', points: 420, matches: 12 },
     { id: 3, name: 'سارة محمود', position: 'مدافع', team: 'الهلال', points: 380, matches: 12 },
   ],
+  teams: [
+    { id: 1, name: 'فريق النجموم', owner: 'أحمد محمد', players: 11, points: 2450, rank: 1, leagues: 2, status: 'نشط' },
+    { id: 2, name: 'فريق العربي', owner: 'فاطمة علي', players: 11, points: 2180, rank: 3, leagues: 1, status: 'نشط' },
+    { id: 3, name: 'فريق العابرون', owner: 'محمود حسن', players: 11, points: 2050, rank: 5, leagues: 3, status: 'نشط' },
+    { id: 4, name: 'فريق الأبطال', owner: 'ليلى محمد', players: 11, points: 1920, rank: 8, leagues: 2, status: 'نشط' },
+    { id: 5, name: 'فريق الفوز', owner: 'علي عبدالله', players: 10, points: 1850, rank: 12, leagues: 1, status: 'نشط' },
+  ],
   leagues: [
     { id: 1, name: 'الدوري الكلاسيكي', type: 'عام', members: 450, status: 'نشط' },
     { id: 2, name: 'دوري الأصدقاء', type: 'خاص', members: 120, status: 'نشط' },
@@ -157,9 +164,10 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
             <TabsTrigger value="users">المستخدمون</TabsTrigger>
+            <TabsTrigger value="teams">الفرق</TabsTrigger>
             <TabsTrigger value="players">اللاعبون</TabsTrigger>
             <TabsTrigger value="leagues">الدوريات</TabsTrigger>
             <TabsTrigger value="settings">الإعدادات</TabsTrigger>
@@ -311,6 +319,88 @@ export default function AdminDashboard() {
                                 <Edit2 className="w-4 h-4" />
                               </Button>
                               <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Teams Tab */}
+          <TabsContent value="teams" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>إدارة الفرق</CardTitle>
+                    <CardDescription>عرض وإدارة الفرق المسجلة وإضافة اللاعبين</CardDescription>
+                  </div>
+                  <Button>
+                    <Plus className="w-4 h-4 ml-2" />
+                    فريق جديد
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4 flex gap-2">
+                  <Input
+                    placeholder="ابحث عن فريق..."
+                    className="flex-1"
+                  />
+                  <Button variant="outline">
+                    <Filter className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="border-b">
+                      <tr>
+                        <th className="text-right py-3 px-4">اسم الفريق</th>
+                        <th className="text-right py-3 px-4">المالك</th>
+                        <th className="text-right py-3 px-4">عدد اللاعبين</th>
+                        <th className="text-right py-3 px-4">النقاط</th>
+                        <th className="text-right py-3 px-4">الرتبة</th>
+                        <th className="text-right py-3 px-4">الدوريات</th>
+                        <th className="text-right py-3 px-4">الحالة</th>
+                        <th className="text-right py-3 px-4">الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mockStats.teams.map((team) => (
+                        <tr key={team.id} className="border-b hover:bg-muted/50">
+                          <td className="py-3 px-4 font-medium">{team.name}</td>
+                          <td className="py-3 px-4">{team.owner}</td>
+                          <td className="py-3 px-4">
+                            <Badge variant="outline">{team.players}</Badge>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge variant="secondary">{team.points}</Badge>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge className="bg-blue-600">رقم {team.rank}</Badge>
+                          </td>
+                          <td className="py-3 px-4">{team.leagues}</td>
+                          <td className="py-3 px-4">
+                            <Badge variant={team.status === 'نشط' ? 'default' : 'secondary'}>
+                              {team.status}
+                            </Badge>
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex gap-2">
+                              <Button variant="ghost" size="sm" title="إدارة اللاعبين">
+                                <Users className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" title="تعديل">
+                                <Edit2 className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" title="حذف">
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
