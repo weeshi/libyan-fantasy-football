@@ -14,7 +14,7 @@ import {
   Clock, DollarSign, Activity, BarChart3, PieChart as PieChartIcon
 } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/_core/hooks/useAuth';
 import { useLocation } from 'wouter';
 
 // Mock data for demonstration
