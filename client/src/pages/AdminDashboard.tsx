@@ -15,6 +15,7 @@ import {
 import { trpc } from '@/lib/trpc';
 import { useAuth } from '@/_core/hooks/useAuth';
 import { useLocation } from 'wouter';
+import { useToast } from '@/contexts/ToastContext';
 import { SearchFilterBar } from '@/components/admin/SearchFilterBar';
 import {
   UserModal, TeamModal, PlayerModal, LeagueModal,
@@ -71,6 +72,7 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 export default function AdminDashboard() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+  const { addToast } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
 
   // ============= Users Tab State =============
@@ -157,78 +159,142 @@ export default function AdminDashboard() {
 
   // ============= User Handlers =============
   const handleAddUser = (data: any) => {
-    const newUser = { id: users.length + 1, ...data, joinDate: new Date().toISOString().split('T')[0], status: 'نشط' };
-    setUsers([...users, newUser]);
-    setUserModalOpen(false);
+    try {
+      const newUser = { id: users.length + 1, ...data, joinDate: new Date().toISOString().split('T')[0], status: 'نشط' };
+      setUsers([...users, newUser]);
+      setUserModalOpen(false);
+      addToast(`تم إضافة المستخدم "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء إضافة المستخدم', 'error');
+    }
   };
 
   const handleEditUser = (data: any) => {
-    setUsers(users.map(u => u.id === selectedUser.id ? { ...u, ...data } : u));
-    setUserModalOpen(false);
-    setSelectedUser(null);
+    try {
+      setUsers(users.map(u => u.id === selectedUser.id ? { ...u, ...data } : u));
+      setUserModalOpen(false);
+      setSelectedUser(null);
+      addToast(`تم تحديث بيانات المستخدم "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء تحديث المستخدم', 'error');
+    }
   };
 
   const handleDeleteUser = () => {
-    setUsers(users.filter(u => u.id !== selectedUser.id));
-    setDeleteUserOpen(false);
-    setSelectedUser(null);
+    try {
+      const userName = selectedUser.name;
+      setUsers(users.filter(u => u.id !== selectedUser.id));
+      setDeleteUserOpen(false);
+      setSelectedUser(null);
+      addToast(`تم حذف المستخدم "${userName}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء حذف المستخدم', 'error');
+    }
   };
 
   // ============= Team Handlers =============
   const handleAddTeam = (data: any) => {
-    const newTeam = { id: teams.length + 1, ...data, players: 0, points: 0, rank: teams.length + 1, leagues: 0, status: 'نشط' };
-    setTeams([...teams, newTeam]);
-    setTeamModalOpen(false);
+    try {
+      const newTeam = { id: teams.length + 1, ...data, players: 0, points: 0, rank: teams.length + 1, leagues: 0, status: 'نشط' };
+      setTeams([...teams, newTeam]);
+      setTeamModalOpen(false);
+      addToast(`تم إضافة الفريق "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء إضافة الفريق', 'error');
+    }
   };
 
   const handleEditTeam = (data: any) => {
-    setTeams(teams.map(t => t.id === selectedTeam.id ? { ...t, ...data } : t));
-    setTeamModalOpen(false);
-    setSelectedTeam(null);
+    try {
+      setTeams(teams.map(t => t.id === selectedTeam.id ? { ...t, ...data } : t));
+      setTeamModalOpen(false);
+      setSelectedTeam(null);
+      addToast(`تم تحديث بيانات الفريق "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء تحديث الفريق', 'error');
+    }
   };
 
   const handleDeleteTeam = () => {
-    setTeams(teams.filter(t => t.id !== selectedTeam.id));
-    setDeleteTeamOpen(false);
-    setSelectedTeam(null);
+    try {
+      const teamName = selectedTeam.name;
+      setTeams(teams.filter(t => t.id !== selectedTeam.id));
+      setDeleteTeamOpen(false);
+      setSelectedTeam(null);
+      addToast(`تم حذف الفريق "${teamName}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء حذف الفريق', 'error');
+    }
   };
 
   // ============= Player Handlers =============
   const handleAddPlayer = (data: any) => {
-    const newPlayer = { id: players.length + 1, ...data, matches: 0 };
-    setPlayers([...players, newPlayer]);
-    setPlayerModalOpen(false);
+    try {
+      const newPlayer = { id: players.length + 1, ...data, matches: 0 };
+      setPlayers([...players, newPlayer]);
+      setPlayerModalOpen(false);
+      addToast(`تم إضافة اللاعب "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء إضافة اللاعب', 'error');
+    }
   };
 
   const handleEditPlayer = (data: any) => {
-    setPlayers(players.map(p => p.id === selectedPlayer.id ? { ...p, ...data } : p));
-    setPlayerModalOpen(false);
-    setSelectedPlayer(null);
+    try {
+      setPlayers(players.map(p => p.id === selectedPlayer.id ? { ...p, ...data } : p));
+      setPlayerModalOpen(false);
+      setSelectedPlayer(null);
+      addToast(`تم تحديث بيانات اللاعب "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء تحديث اللاعب', 'error');
+    }
   };
 
   const handleDeletePlayer = () => {
-    setPlayers(players.filter(p => p.id !== selectedPlayer.id));
-    setDeletePlayerOpen(false);
-    setSelectedPlayer(null);
+    try {
+      const playerName = selectedPlayer.name;
+      setPlayers(players.filter(p => p.id !== selectedPlayer.id));
+      setDeletePlayerOpen(false);
+      setSelectedPlayer(null);
+      addToast(`تم حذف اللاعب "${playerName}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء حذف اللاعب', 'error');
+    }
   };
 
   // ============= League Handlers =============
   const handleAddLeague = (data: any) => {
-    const newLeague = { id: leagues.length + 1, ...data, members: 0, status: 'نشط' };
-    setLeagues([...leagues, newLeague]);
-    setLeagueModalOpen(false);
+    try {
+      const newLeague = { id: leagues.length + 1, ...data, members: 0, status: 'نشط' };
+      setLeagues([...leagues, newLeague]);
+      setLeagueModalOpen(false);
+      addToast(`تم إضافة الدوري "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء إضافة الدوري', 'error');
+    }
   };
 
   const handleEditLeague = (data: any) => {
-    setLeagues(leagues.map(l => l.id === selectedLeague.id ? { ...l, ...data } : l));
-    setLeagueModalOpen(false);
-    setSelectedLeague(null);
+    try {
+      setLeagues(leagues.map(l => l.id === selectedLeague.id ? { ...l, ...data } : l));
+      setLeagueModalOpen(false);
+      setSelectedLeague(null);
+      addToast(`تم تحديث بيانات الدوري "${data.name}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء تحديث الدوري', 'error');
+    }
   };
 
   const handleDeleteLeague = () => {
-    setLeagues(leagues.filter(l => l.id !== selectedLeague.id));
-    setDeleteLeagueOpen(false);
-    setSelectedLeague(null);
+    try {
+      const leagueName = selectedLeague.name;
+      setLeagues(leagues.filter(l => l.id !== selectedLeague.id));
+      setDeleteLeagueOpen(false);
+      setSelectedLeague(null);
+      addToast(`تم حذف الدوري "${leagueName}" بنجاح`, 'success');
+    } catch (error) {
+      addToast('حدث خطأ أثناء حذف الدوري', 'error');
+    }
   };
 
   return (
