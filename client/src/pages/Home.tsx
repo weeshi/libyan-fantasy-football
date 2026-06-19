@@ -1,116 +1,18 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
-import { Users, Trophy, Zap, BarChart3, Menu, X } from "lucide-react";
+import { APP_TITLE, getLoginUrl } from "@/const";
+import { Users, Trophy, Zap, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
-import { useState } from "react";
+import Navigation from "@/components/Navigation";
 
 export default function Home() {
-  const { user, isAuthenticated, logout } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" dir="rtl">
       {/* Navigation */}
-      <nav className="border-b border-slate-700 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-white">{APP_TITLE}</span>
-              <img src={APP_LOGO} alt="شعار" className="w-8 h-8" />
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {isAuthenticated && (
-                <>
-                  <Link href="/create-team">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">إنشاء فريق</span>
-                  </Link>
-                  <Link href="/leaderboard">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الترتيب</span>
-                  </Link>
-                  <Link href="/matches">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">المباريات</span>
-                  </Link>
-                  <Link href="/transfers">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الانتقالات</span>
-                  </Link>
-                  <Link href="/chips">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الرقائق</span>
-                  </Link>
-                  <Link href="/h2h">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">المواجهات</span>
-                  </Link>
-                  <Link href="/cup">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الكأس</span>
-                  </Link>
-                  <Link href="/player-comparison">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">مقارنة اللاعبين</span>
-                  </Link>
-                  <Link href="/faq">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الأسئلة الشائعة</span>
-                  </Link>
-                  <Link href="/admin">
-                    <span className="text-slate-300 hover:text-white cursor-pointer transition">الإدارة</span>
-                  </Link>
-                </>
-              )}
-            </div>
-            
-            {/* User Section */}
-            <div className="flex items-center gap-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-slate-300 hidden sm:inline">{user?.name}</span>
-                  <Button variant="outline" size="sm" onClick={logout}>تسجيل الخروج</Button>
-                </>
-              ) : (
-                <a href={getLoginUrl()}>
-                  <Button variant="default" size="sm">تسجيل الدخول</Button>
-                </a>
-              )}
-            </div>
-          </div>
-          
-          {/* Mobile Navigation */}
-          {isAuthenticated && (
-            <div className="md:hidden mt-4 flex flex-wrap gap-2">
-              <Link href="/create-team">
-                <Button variant="ghost" size="sm" className="text-xs">إنشاء فريق</Button>
-              </Link>
-              <Link href="/leaderboard">
-                <Button variant="ghost" size="sm" className="text-xs">الترتيب</Button>
-              </Link>
-              <Link href="/matches">
-                <Button variant="ghost" size="sm" className="text-xs">المباريات</Button>
-              </Link>
-              <Link href="/transfers">
-                <Button variant="ghost" size="sm" className="text-xs">الانتقالات</Button>
-              </Link>
-              <Link href="/chips">
-                <Button variant="ghost" size="sm" className="text-xs">الرقائق</Button>
-              </Link>
-              <Link href="/h2h">
-                <Button variant="ghost" size="sm" className="text-xs">المواجهات</Button>
-              </Link>
-              <Link href="/cup">
-                <Button variant="ghost" size="sm" className="text-xs">الكأس</Button>
-              </Link>
-              <Link href="/player-comparison">
-                <Button variant="ghost" size="sm" className="text-xs">مقارنة</Button>
-              </Link>
-              <Link href="/faq">
-                <Button variant="ghost" size="sm" className="text-xs">الأسئلة</Button>
-              </Link>
-              <Link href="/admin">
-                <Button variant="ghost" size="sm" className="text-xs">الإدارة</Button>
-              </Link>
-            </div>
-          )}
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
