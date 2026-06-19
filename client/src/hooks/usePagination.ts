@@ -1,33 +1,27 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
-interface UsePaginationProps<T> {
-  items: T[];
+interface UsePaginationProps {
+  totalItems: number;
   initialItemsPerPage?: number;
 }
 
-export function usePagination<T>({
-  items,
+export function usePagination({
+  totalItems,
   initialItemsPerPage = 10,
-}: UsePaginationProps<T>) {
+}: UsePaginationProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 
-  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return items.slice(startIndex, endIndex);
-  }, [items, currentPage, itemsPerPage]);
-
-  const handlePageChange = (page: number) => {
-    const maxPage = Math.ceil(items.length / itemsPerPage);
+  const setCurrentPage_safe = (page: number) => {
+    const maxPage = Math.ceil(totalItems / itemsPerPage);
     if (page >= 1 && page <= maxPage) {
       setCurrentPage(page);
     }
   };
 
-  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+  const setItemsPerPage_safe = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1); // Reset to first page when changing items per page
   };
@@ -36,8 +30,7 @@ export function usePagination<T>({
     currentPage,
     totalPages,
     itemsPerPage,
-    paginatedItems,
-    handlePageChange,
-    handleItemsPerPageChange,
+    setCurrentPage: setCurrentPage_safe,
+    setItemsPerPage: setItemsPerPage_safe,
   };
 }

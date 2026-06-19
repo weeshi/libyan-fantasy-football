@@ -91,7 +91,7 @@ export default function AdminDashboard() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [deleteUserOpen, setDeleteUserOpen] = useState(false);
   const [users, setUsers] = useState(mockStats.recentUsers);
-  const userPagination = usePagination(users.length);
+  const userPagination = usePagination({ totalItems: users.length });
 
   // ============= Teams Tab State =============
   const [teamSearch, setTeamSearch] = useState('');
@@ -103,7 +103,7 @@ export default function AdminDashboard() {
   const [deleteTeamOpen, setDeleteTeamOpen] = useState(false);
   const [managePlayersOpen, setManagePlayersOpen] = useState(false);
   const [teams, setTeams] = useState(mockStats.teams);
-  const teamPagination = usePagination(teams.length);
+  const teamPagination = usePagination({ totalItems: teams.length });
 
   // ============= Players Tab State =============
   const [playerSearch, setPlayerSearch] = useState('');
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
   const [deletePlayerOpen, setDeletePlayerOpen] = useState(false);
   const [players, setPlayers] = useState(mockStats.topPlayers);
-  const playerPagination = usePagination(players.length);
+  const playerPagination = usePagination({ totalItems: players.length });
 
   // ============= Leagues Tab State =============
   const [leagueSearch, setLeagueSearch] = useState('');
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
   const [selectedLeague, setSelectedLeague] = useState<any>(null);
   const [deleteLeagueOpen, setDeleteLeagueOpen] = useState(false);
   const [leagues, setLeagues] = useState(mockStats.leagues);
-  const leaguePagination = usePagination(leagues.length);
+  const leaguePagination = usePagination({ totalItems: leagues.length });
 
   // ============= Sorting and Filtering Logic =============
   const sortedUsers = useMemo(() => {
@@ -593,9 +593,9 @@ export default function AdminDashboard() {
                 <Pagination
                   currentPage={userPagination.currentPage}
                   totalPages={Math.ceil(sortedUsers.length / userPagination.itemsPerPage)}
-                  onPageChange={userPagination.setCurrentPage}
+                  onPageChange={(page) => userPagination.setCurrentPage(page)}
                   itemsPerPage={userPagination.itemsPerPage}
-                  onItemsPerPageChange={userPagination.setItemsPerPage}
+                  onItemsPerPageChange={(items) => userPagination.setItemsPerPage(items)}
                 />
               </CardContent>
             </Card>
@@ -695,9 +695,9 @@ export default function AdminDashboard() {
                 <Pagination
                   currentPage={teamPagination.currentPage}
                   totalPages={Math.ceil(sortedTeams.length / teamPagination.itemsPerPage)}
-                  onPageChange={teamPagination.setCurrentPage}
+                  onPageChange={(page) => teamPagination.setCurrentPage(page)}
                   itemsPerPage={teamPagination.itemsPerPage}
-                  onItemsPerPageChange={teamPagination.setItemsPerPage}
+                  onItemsPerPageChange={(items) => teamPagination.setItemsPerPage(items)}
                 />
               </CardContent>
             </Card>
@@ -803,9 +803,9 @@ export default function AdminDashboard() {
                 <Pagination
                   currentPage={playerPagination.currentPage}
                   totalPages={Math.ceil(sortedPlayers.length / playerPagination.itemsPerPage)}
-                  onPageChange={playerPagination.setCurrentPage}
+                  onPageChange={(page) => playerPagination.setCurrentPage(page)}
                   itemsPerPage={playerPagination.itemsPerPage}
-                  onItemsPerPageChange={playerPagination.setItemsPerPage}
+                  onItemsPerPageChange={(items) => playerPagination.setItemsPerPage(items)}
                 />
               </CardContent>
             </Card>
@@ -911,9 +911,9 @@ export default function AdminDashboard() {
                 <Pagination
                   currentPage={leaguePagination.currentPage}
                   totalPages={Math.ceil(sortedLeagues.length / leaguePagination.itemsPerPage)}
-                  onPageChange={leaguePagination.setCurrentPage}
+                  onPageChange={(page) => leaguePagination.setCurrentPage(page)}
                   itemsPerPage={leaguePagination.itemsPerPage}
-                  onItemsPerPageChange={leaguePagination.setItemsPerPage}
+                  onItemsPerPageChange={(items) => leaguePagination.setItemsPerPage(items)}
                 />
               </CardContent>
             </Card>
