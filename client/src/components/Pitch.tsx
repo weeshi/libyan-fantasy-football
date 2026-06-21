@@ -33,7 +33,9 @@ const teamColors: Record<number, { bg: string; text: string; kit: string }> = {
   10: { bg: "bg-indigo-600", text: "text-indigo-600", kit: "🟦" }, // الوحدة سرت
 };
 
-export default function Pitch({ players, teamName }: PitchProps) {
+import { memo } from 'react';
+
+function PitchComponent({ players, teamName }: PitchProps) {
   // Filter out invalid players
   const validPlayers = players.filter(p => p && (p.name || p.position));
   
@@ -132,3 +134,5 @@ export default function Pitch({ players, teamName }: PitchProps) {
     </Card>
   );
 }
+
+export default memo(PitchComponent);

@@ -3,7 +3,7 @@
  * Displays countdown timer and transfer window status
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Clock, CheckCircle2, XCircle } from "lucide-react";
@@ -15,7 +15,7 @@ interface DeadlineCountdownProps {
   gameweekNumber?: number;
 }
 
-export default function TransferDeadlineCountdown({
+function TransferDeadlineCountdownComponent({
   deadline,
   isOpen,
   gameweekNumber,
@@ -235,3 +235,5 @@ export default function TransferDeadlineCountdown({
     </Card>
   );
 }
+
+export default memo(TransferDeadlineCountdownComponent);

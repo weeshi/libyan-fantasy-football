@@ -1,6 +1,7 @@
 import { Loader2 } from 'lucide-react';
+import { memo } from 'react';
 
-export default function LoadingSpinner() {
+function LoadingSpinnerComponent() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <div className="flex flex-col items-center gap-4">
@@ -10,3 +11,5 @@ export default function LoadingSpinner() {
     </div>
   );
 }
+
+export default memo(LoadingSpinnerComponent);

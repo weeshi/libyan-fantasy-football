@@ -3,7 +3,7 @@
  * Display and manage available chips for the user
  */
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +33,7 @@ interface ChipsSelectorProps {
   isLoading?: boolean;
 }
 
-export default function ChipsSelector({
+function ChipsSelectorComponent({
   availableChips,
   activeChip,
   onUseChip,
@@ -280,3 +280,5 @@ export default function ChipsSelector({
     </div>
   );
 }
+
+export default memo(ChipsSelectorComponent);
