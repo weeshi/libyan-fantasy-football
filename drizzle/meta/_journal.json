@@ -43,6 +43,13 @@
       "when": 1779560514714,
       "tag": "0005_fine_next_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1782001877766,
+      "tag": "0006_oval_shinko_yamashiro",
+      "breakpoints": true
     }
   ]
 }

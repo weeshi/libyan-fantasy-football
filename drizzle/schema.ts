@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, index } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -20,7 +20,11 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-});
+}, (table) => ({
+  emailIdx: index("idx_user_email").on(table.email),
+  roleIdx: index("idx_user_role").on(table.role),
+  createdAtIdx: index("idx_user_createdAt").on(table.createdAt),
+}));
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
@@ -53,7 +57,11 @@ export const players = mysqlTable("players", {
   totalPoints: int("totalPoints").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  teamIdIdx: index("idx_player_teamId").on(table.teamId),
+  positionIdx: index("idx_player_position").on(table.position),
+  totalPointsIdx: index("idx_player_totalPoints").on(table.totalPoints),
+}));
 
 export type Player = typeof players.$inferSelect;
 export type InsertPlayer = typeof players.$inferInsert;
@@ -71,7 +79,11 @@ export const leagues = mysqlTable("leagues", {
   status: mysqlEnum("status", ["draft", "active", "completed"]).default("draft").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  creatorIdIdx: index("idx_league_creatorId").on(table.creatorId),
+  statusIdx: index("idx_league_status").on(table.status),
+  leagueTypeIdx: index("idx_league_leagueType").on(table.leagueType),
+}));
 
 export type League = typeof leagues.$inferSelect;
 export type InsertLeague = typeof leagues.$inferInsert;
@@ -95,7 +107,12 @@ export const userTeams = mysqlTable("userTeams", {
   activeChip: varchar("activeChip", { length: 50 }), // captain, triple_captain, wildcard, etc
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  userIdIdx: index("idx_userTeam_userId").on(table.userId),
+  leagueIdIdx: index("idx_userTeam_leagueId").on(table.leagueId),
+  userLeagueIdx: index("idx_userTeam_userId_leagueId").on(table.userId, table.leagueId),
+  totalPointsIdx: index("idx_userTeam_totalPoints").on(table.totalPoints),
+}));
 
 export type UserTeam = typeof userTeams.$inferSelect;
 export type InsertUserTeam = typeof userTeams.$inferInsert;
@@ -112,7 +129,11 @@ export const userTeamPlayers = mysqlTable("userTeamPlayers", {
   isOnBench: int("isOnBench").default(0).notNull(), // 0 = false, 1 = true
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  userTeamIdIdx: index("idx_userTeamPlayer_userTeamId").on(table.userTeamId),
+  playerIdIdx: index("idx_userTeamPlayer_playerId").on(table.playerId),
+  isCaptainIdx: index("idx_userTeamPlayer_isCaptain").on(table.isCaptain),
+}));
 
 export type UserTeamPlayer = typeof userTeamPlayers.$inferSelect;
 export type InsertUserTeamPlayer = typeof userTeamPlayers.$inferInsert;
@@ -130,7 +151,12 @@ export const matches = mysqlTable("matches", {
   status: mysqlEnum("status", ["scheduled", "live", "completed", "postponed"]).default("scheduled").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  homeTeamIdIdx: index("idx_match_homeTeamId").on(table.homeTeamId),
+  awayTeamIdIdx: index("idx_match_awayTeamId").on(table.awayTeamId),
+  statusIdx: index("idx_match_status").on(table.status),
+  matchDateIdx: index("idx_match_matchDate").on(table.matchDate),
+}));
 
 export type Match = typeof matches.$inferSelect;
 export type InsertMatch = typeof matches.$inferInsert;
@@ -151,7 +177,11 @@ export const playerPerformances = mysqlTable("playerPerformances", {
   points: int("points").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  matchIdIdx: index("idx_playerPerformance_matchId").on(table.matchId),
+  playerIdIdx: index("idx_playerPerformance_playerId").on(table.playerId),
+  matchPlayerIdx: index("idx_playerPerformance_matchId_playerId").on(table.matchId, table.playerId),
+}));
 
 export type PlayerPerformance = typeof playerPerformances.$inferSelect;
 export type InsertPlayerPerformance = typeof playerPerformances.$inferInsert;
@@ -170,7 +200,11 @@ export const gameweeks = mysqlTable("gameweeks", {
   status: mysqlEnum("status", ["upcoming", "active", "completed"]).default("upcoming").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  leagueIdIdx: index("idx_gameweek_leagueId").on(table.leagueId),
+  statusIdx: index("idx_gameweek_status").on(table.status),
+  leagueGameweekIdx: index("idx_gameweek_leagueId_gameweekNumber").on(table.leagueId, table.gameweekNumber),
+}));
 
 export type Gameweek = typeof gameweeks.$inferSelect;
 export type InsertGameweek = typeof gameweeks.$inferInsert;
@@ -185,7 +219,11 @@ export const gameweekScores = mysqlTable("gameweekScores", {
   points: int("points").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  userTeamIdIdx: index("idx_gameweekScore_userTeamId").on(table.userTeamId),
+  gameweekIdIdx: index("idx_gameweekScore_gameweekId").on(table.gameweekId),
+  userTeamGameweekIdx: index("idx_gameweekScore_userTeamId_gameweekId").on(table.userTeamId, table.gameweekId),
+}));
 
 export type GameweekScore = typeof gameweekScores.$inferSelect;
 export type InsertGameweekScore = typeof gameweekScores.$inferInsert;
@@ -204,7 +242,12 @@ export const transactions = mysqlTable("transactions", {
   budgetAfter: int("budgetAfter").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  userTeamIdIdx: index("idx_transaction_userTeamId").on(table.userTeamId),
+  playerIdIdx: index("idx_transaction_playerId").on(table.playerId),
+  transactionTypeIdx: index("idx_transaction_transactionType").on(table.transactionType),
+  createdAtIdx: index("idx_transaction_createdAt").on(table.createdAt),
+}));
 
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = typeof transactions.$inferInsert;
@@ -246,7 +289,12 @@ export const playerGameweekStats = mysqlTable("playerGameweekStats", {
   totalPoints: int("totalPoints").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => ({
+  playerIdIdx: index("idx_playerGameweekStats_playerId").on(table.playerId),
+  gameweekIdIdx: index("idx_playerGameweekStats_gameweekId").on(table.gameweekId),
+  playerGameweekIdx: index("idx_playerGameweekStats_playerId_gameweekId").on(table.playerId, table.gameweekId),
+  totalPointsIdx: index("idx_playerGameweekStats_totalPoints").on(table.totalPoints),
+}));
 
 export type PlayerGameweekStat = typeof playerGameweekStats.$inferSelect;
 export type InsertPlayerGameweekStat = typeof playerGameweekStats.$inferInsert;
