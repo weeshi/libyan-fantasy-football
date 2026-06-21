@@ -1,7 +1,9 @@
-import { eq, and, lte } from "drizzle-orm";
+import { eq, and, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, matches, userTeams, userTeamPlayers, players, leagues, transactions, teams, InsertUserTeam, InsertUserTeamPlayer, InsertTransaction } from "../drizzle/schema";
 import { ENV } from './_core/env';
+
+import { buildPaginationSQL, createPaginationResult, PaginationResult } from "./pagination";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -115,11 +117,18 @@ export async function getPlayersByTeamId(teamId: number) {
   }
 }
 
-export async function getAllPlayers() {
+export async function getAllPlayers(page: number = 1, limit: number = 50) {
   const db = await getDb();
-  if (!db) return [];
+  if (!db) return { data: [], total: 0, page, limit, totalPages: 0, hasNextPage: false, hasPreviousPage: false };
   try {
-    return await db.select({
+    const { limit: validLimit, offset } = buildPaginationSQL(page, limit);
+    
+    // Get total count
+    const countResult = await db.select({ count: sql`COUNT(*)` }).from(players);
+    const total = Number(countResult[0]?.count || 0);
+    
+    // Get paginated data
+    const data = await db.select({
       id: players.id,
       name: players.name,
       position: players.position,
@@ -130,10 +139,12 @@ export async function getAllPlayers() {
         name: teams.name,
         city: teams.city,
       },
-    }).from(players).innerJoin(teams, eq(players.teamId, teams.id)).limit(1000);
+    }).from(players).innerJoin(teams, eq(players.teamId, teams.id)).limit(validLimit).offset(offset);
+    
+    return createPaginationResult(data, total, page, validLimit);
   } catch (error) {
     console.error("[Database] Failed to get all players:", error);
-    return [];
+    return { data: [], total: 0, page, limit, totalPages: 0, hasNextPage: false, hasPreviousPage: false };
   }
 }
 

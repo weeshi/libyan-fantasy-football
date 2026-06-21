@@ -49,8 +49,11 @@ export const appRouter = router({
     list: publicProcedure.query(async () => {
       return [];
     }),
-    getAll: publicProcedure.query(async () => {
-      return await getAllPlayers();
+    getAll: publicProcedure.input(z.object({
+      page: z.number().int().min(1).default(1),
+      limit: z.number().int().min(1).max(100).default(50),
+    })).query(async ({ input }) => {
+      return await getAllPlayers(input.page, input.limit);
     }),
     byTeam: publicProcedure.input(z.object({ teamId: z.number() })).query(async ({ input }) => {
       return [];
