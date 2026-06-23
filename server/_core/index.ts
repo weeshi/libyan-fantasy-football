@@ -8,6 +8,7 @@ import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { WebSocketManager } from "./websocket";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -31,6 +32,13 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  
+  // Initialize WebSocket manager
+  const jwtSecret = process.env.JWT_SECRET || 'default-secret';
+  const wsManager = new WebSocketManager(server, jwtSecret);
+  
+  // Make wsManager available globally for tRPC procedures
+  (global as any).wsManager = wsManager;
   
   // Enable gzip compression for all responses
   app.use(compression({
@@ -83,6 +91,8 @@ async function startServer() {
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
     console.log(`gzip compression enabled (threshold: 1KB, level: 6)`);
+    console.log(`WebSocket server ready at ws://localhost:${port}/ws`);
+    console.log(`Active WebSocket connections: ${wsManager.getConnectionCount()}`);
   });
 }
 
