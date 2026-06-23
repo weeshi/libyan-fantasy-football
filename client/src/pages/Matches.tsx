@@ -1,25 +1,51 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Link, useLocation } from "wouter";
-import { Calendar, Clock, Trophy } from "lucide-react";
-import { useState } from "react";
+import { Calendar, Clock, Trophy, Wifi, WifiOff } from "lucide-react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 export default function Matches() {
   const { isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
   const [filterStatus, setFilterStatus] = useState<"all" | "scheduled" | "live" | "completed">("all");
+  const [liveUpdates, setLiveUpdates] = useState<Map<number, any>>(new Map());
 
   // Fetch all matches
   const { data: allMatches = [] } = trpc.matches.all.useQuery(undefined, {
     enabled: isAuthenticated,
   });
 
-  // Filter matches based on status
-  const filteredMatches = filterStatus === "all" 
-    ? allMatches 
-    : allMatches.filter((match: any) => match.status === filterStatus);
+  // Subscribe to live match updates via WebSocket
+  const { isConnected } = useWebSocket({
+    channels: allMatches
+      .filter((m: any) => m.status === "live")
+      .map((m: any) => `match:${m.id}`),
+    onMessage: (message) => {
+      if (message.type === "live-score" || message.type === "update") {
+        const { matchId, homeScore, awayScore, minute, status } = message.data || {};
+        if (matchId) {
+          setLiveUpdates((prev) => {
+            const updated = new Map(prev);
+            updated.set(matchId, { homeScore, awayScore, minute, status });
+            return updated;
+          });
+        }
+      }
+    },
+  });
+
+  // Filter matches based on status and merge with live updates
+  const filteredMatches = (
+    filterStatus === "all"
+      ? allMatches
+      : allMatches.filter((match: any) => match.status === filterStatus)
+  ).map((match: any) => {
+    const liveUpdate = liveUpdates.get(match.id);
+    return liveUpdate ? { ...match, ...liveUpdate } : match;
+  });
 
   if (!isAuthenticated) {
     navigate("/");
@@ -29,28 +55,32 @@ export default function Matches() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "scheduled":
-        return <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold">مجدولة</span>;
+        return (
+          <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-semibold">
+            مجدولة
+          </span>
+        );
       case "live":
-        return <span className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-sm font-semibold animate-pulse">جارية</span>;
+        return (
+          <span className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-sm font-semibold animate-pulse">
+            جارية
+          </span>
+        );
       case "completed":
-        return <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold">انتهت</span>;
+        return (
+          <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold">
+            انتهت
+          </span>
+        );
       case "postponed":
-        return <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm font-semibold">مؤجلة</span>;
+        return (
+          <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm font-semibold">
+            مؤجلة
+          </span>
+        );
       default:
         return null;
     }
-  };
-
-  const formatDate = (date: Date | string) => {
-    const d = new Date(date);
-    return d.toLocaleDateString("ar-LY", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (
@@ -66,9 +96,25 @@ export default function Matches() {
               </h1>
               <p className="text-slate-400">مباريات الدوري الليبي</p>
             </div>
-            <Link href="/dashboard">
-              <Button variant="outline">العودة</Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* WebSocket Connection Status */}
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-700">
+                {isConnected ? (
+                  <>
+                    <Wifi className="w-4 h-4 text-green-400" />
+                    <span className="text-green-400 text-sm font-semibold">متصل</span>
+                  </>
+                ) : (
+                  <>
+                    <WifiOff className="w-4 h-4 text-red-400" />
+                    <span className="text-red-400 text-sm font-semibold">غير متصل</span>
+                  </>
+                )}
+              </div>
+              <Link href="/dashboard">
+                <Button variant="outline">العودة</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -122,7 +168,14 @@ export default function Matches() {
         {filteredMatches.length > 0 ? (
           <div className="space-y-4">
             {(filteredMatches as any[]).map((match: any) => (
-              <Card key={match.id} className="bg-slate-800 border-slate-700 hover:border-slate-600 transition">
+              <Card
+                key={match.id}
+                className={`border-slate-700 transition ${
+                  match.status === "live"
+                    ? "bg-red-900/20 border-red-500/50 hover:border-red-500"
+                    : "bg-slate-800 hover:border-slate-600"
+                }`}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     {/* Home Team */}
@@ -142,8 +195,13 @@ export default function Matches() {
                         </div>
                       ) : match.status === "live" ? (
                         <div className="text-center">
-                          <p className="text-red-400 font-bold text-2xl animate-pulse">جارية</p>
-                          <p className="text-slate-400 text-xs">الآن</p>
+                          <p className="text-white font-bold text-2xl">
+                            {match.homeScore !== undefined ? match.homeScore : "-"} -{" "}
+                            {match.awayScore !== undefined ? match.awayScore : "-"}
+                          </p>
+                          <p className="text-red-400 text-xs animate-pulse font-semibold">
+                            {match.minute ? `الدقيقة ${match.minute}'` : "جارية الآن"}
+                          </p>
                         </div>
                       ) : (
                         <div className="text-center">
@@ -176,6 +234,12 @@ export default function Matches() {
                         minute: "2-digit",
                       })}
                     </div>
+                    {match.status === "live" && isConnected && (
+                      <div className="flex items-center gap-1 text-green-400">
+                        <Wifi className="w-4 h-4" />
+                        تحديثات مباشرة
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
