@@ -33,9 +33,18 @@ export default defineConfig({
       ".manus-asia.computer",
       ".manuscomputer.ai",
       ".manusvm.computer",
+      ".us1.manus.computer",
+      ".us2.manus.computer",
+      ".asia.manus.computer",
       "localhost",
       "127.0.0.1",
     ],
+    hmr: {
+      protocol: "wss",
+      host: "auto",
+      port: 443,
+      clientPort: 443,
+    },
     fs: {
       strict: true,
       deny: ["**/.*"],
