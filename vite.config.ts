@@ -39,13 +39,9 @@ export default defineConfig({
       "localhost",
       "127.0.0.1",
     ],
-    // HMR disabled in production, only enabled for development
-    hmr: process.env.NODE_ENV === "development" ? {
-      protocol: "wss",
-      host: "auto",
-      port: 443,
-      clientPort: 443,
-    } : false,
+    // Disable HMR completely - it causes issues with remote access
+    // HMR will be handled in server/_core/vite.ts based on NODE_ENV
+    hmr: false,
     fs: {
       strict: true,
       deny: ["**/.*"],
