@@ -39,12 +39,13 @@ export default defineConfig({
       "localhost",
       "127.0.0.1",
     ],
-    hmr: {
+    // HMR disabled in production, only enabled for development
+    hmr: process.env.NODE_ENV === "development" ? {
       protocol: "wss",
       host: "auto",
       port: 443,
       clientPort: 443,
-    },
+    } : false,
     fs: {
       strict: true,
       deny: ["**/.*"],
