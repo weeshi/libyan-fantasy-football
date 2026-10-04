@@ -7,9 +7,13 @@ import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
 
 export async function setupVite(app: Express, server: Server) {
+  // Manus Preview runs the app through the development middleware, but its
+  // public proxy does not expose the Vite HMR WebSocket endpoint. Keep HMR
+  // opt-in so the preview never injects a client that can only reach localhost.
+  const enableHmr = process.env.ENABLE_VITE_HMR === "true";
   const serverOptions = {
     middlewareMode: true,
-    hmr: process.env.NODE_ENV === "development" ? { server } : false,
+    hmr: enableHmr ? { server } : false,
     allowedHosts: true as const,
   };
 
@@ -47,10 +51,11 @@ export async function setupVite(app: Express, server: Server) {
       );
       const page = await vite.transformIndexHtml(url, template);
       
-      // Remove Vite client script if HMR is disabled (production)
+      // Keep the generated HTML consistent with the HMR setting. Vite may
+      // inject its client while transforming the template in middleware mode.
       let finalPage = page;
-      if (process.env.NODE_ENV !== "development") {
-        finalPage = page.replace(/<script[^>]*src="\/@vite\/client"[^>]*><\/script>/g, '');
+      if (!enableHmr) {
+        finalPage = page.replace(/<script[^>]*src="\/\@vite\/client"[^>]*><\/script>/g, '');
       }
       
       res.status(200).set({ "Content-Type": "text/html" }).end(finalPage);

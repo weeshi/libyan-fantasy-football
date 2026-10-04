@@ -543,3 +543,9 @@
 | 9. Rate Limiting | ✅ مكتمل | حماية من DDoS |
 | 10. WebSocket | ✅ مكتمل | تحديثات فورية بدون polling |
 
+
+## إصلاح خطأ Vite HMR في Manus Preview — 2026-10-04
+- [ ] تحديد مصدر حقن `@vite/client` في المعاينة الحالية، وهل الصفحة تعمل عبر dev server أم production server.
+- [ ] فحص إعدادات `vite.config.ts` و`server/_core/vite.ts` وملف HTML الناتج وسجلات الخادم.
+- [ ] تطبيق إصلاح محدود يمنع اتصال HMR غير الصحيح في المعاينة مع إبقاء التطوير المحلي قابلاً للعمل.
+- [ ] التحقق عبر build وtest وفتح رابط المعاينة، ثم حفظ checkpoint بعد نجاح التحقق.
